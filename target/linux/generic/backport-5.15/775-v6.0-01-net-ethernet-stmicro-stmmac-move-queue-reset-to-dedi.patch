@@ -71,7 +71,7 @@ Signed-off-by: Jakub Kicinski <kuba@kernel.org>
  	ret = stmmac_hw_setup(dev, true);
  	if (ret < 0) {
  		netdev_err(priv->dev, "%s: Hw setup failed\n", __func__);
-@@ -6424,6 +6417,7 @@ void stmmac_enable_rx_queue(struct stmma
+@@ -6430,6 +6423,7 @@ void stmmac_enable_rx_queue(struct stmma
  		return;
  	}
  
@@ -79,7 +79,7 @@ Signed-off-by: Jakub Kicinski <kuba@kernel.org>
  	stmmac_clear_rx_descriptors(priv, queue);
  
  	stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
-@@ -6485,6 +6479,7 @@ void stmmac_enable_tx_queue(struct stmma
+@@ -6491,6 +6485,7 @@ void stmmac_enable_tx_queue(struct stmma
  		return;
  	}
  

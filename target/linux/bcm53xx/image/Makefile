@@ -88,6 +88,12 @@ define Build/luxul-lxl
 	mv $@.new $@
 endef
 
+# Outputs a lzma compressed U-Boot that start at 0x00008000
+# just like the D-Link boot loaders expect
+define Build/dlink-uboot-bin
+	$(STAGING_DIR_HOST)/bin/lzma e $(STAGING_DIR_IMAGE)/$(DEVICE_NAME)-u-boot.bin -d16 $@
+endef
+
 define Build/seama-nand
 	# Seama entity
 	$(STAGING_DIR_HOST)/bin/oseama \
@@ -158,6 +164,14 @@ define Device/asus
   IMAGES := trx
   IMAGE/trx := append-ubi | trx-nand | asus-trx
 endef
+
+define Device/asus_rt-ac3100
+  $(call Device/asus)
+  DEVICE_MODEL := RT-AC3100
+  DEVICE_PACKAGES := $(BRCMFMAC_4366B1) $(BRCMFMAC_4366C0) $(USB3_PACKAGES)
+  ASUS_PRODUCTID := RT-AC3100
+endef
+TARGET_DEVICES += asus_rt-ac3100
 
 define Device/asus_rt-ac56u
   $(call Device/asus)
@@ -266,6 +280,21 @@ define Device/dlink_dir-885l
 endef
 TARGET_DEVICES += dlink_dir-885l
 
+define Device/dlink_dir-890l
+  DEVICE_VENDOR := D-Link
+  DEVICE_MODEL := DIR-890L
+  DEVICE_PACKAGES := $(BRCMFMAC_43602A1) $(USB2_PACKAGES) $(USB3_PACKAGES)
+  # Layout: U-boot (128kb max) followed by kernel and appended DTB.
+  # This is done because the boot loader will only read the first 2 MB
+  # from the flash and decompress the LZMA it finds there after the
+  # SEAMA header. Since the compressed kernel will not fit in 2 MB,
+  # we put U-Boot there and let U-Boot read and execute the kernel.
+  KERNEL := dlink-uboot-bin | pad-to 128k | append-kernel | append-dtb
+  $(Device/dlink)
+  SIGNATURE := wrgac36_dlink.2013gui_dir890
+endef
+TARGET_DEVICES += dlink_dir-890l
+
 define Device/dlink_dwl-8610ap
   DEVICE_VENDOR := D-Link
   DEVICE_MODEL := DWL-8610AP
@@ -351,7 +380,7 @@ define Device/meraki_mr26
   DEVICE_VENDOR := Meraki
   DEVICE_MODEL := MR26
   DEVICE_PACKAGES := $(B43) kmod-i2c-bcm-iproc kmod-eeprom-at24 \
-	kmod-hwmon-ina2xx nu801
+	kmod-hwmon-ina2xx kmod-leds-uleds nu801
   DEVICE_DTS := bcm53015-meraki-mr26
 # resize the initramfs to fit the size of the existing part.safe.
   KERNEL_LOADADDR := 0x00008000
@@ -461,6 +490,10 @@ TARGET_DEVICES += smartrg_sr400ac
 define Device/phicomm_k3
   DEVICE_VENDOR := PHICOMM
   DEVICE_MODEL := K3
+  DEVICE_ALT0_VENDOR := Wavlink
+  DEVICE_ALT0_MODEL := QUANTUM DAX
+  DEVICE_ALT1_VENDOR := Wavlink
+  DEVICE_ALT1_MODEL := WL-WN538A8
   DEVICE_PACKAGES := $(BRCMFMAC_4366C0) $(USB3_PACKAGES)
   IMAGES := trx
 endef

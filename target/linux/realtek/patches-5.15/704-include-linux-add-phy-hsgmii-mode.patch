@@ -9,12 +9,31 @@ protocol.
 
 Submitted-by: Birger Koblitz <git@birger-koblitz.de>
 ---
+ drivers/net/phy/phylink.c                     | 2 ++
  include/linux/phy.h                           | 3 +++
- 1 file changed, 3 insertions(+)
+ 2 file changed, 5 insertions(+)
 
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+@@ -408,6 +408,7 @@ void phylink_get_linkmodes(unsigned long
+ 
+ 	case PHY_INTERFACE_MODE_XGMII:
+ 	case PHY_INTERFACE_MODE_RXAUI:
++	case PHY_INTERFACE_MODE_HSGMII:
+ 	case PHY_INTERFACE_MODE_XAUI:
+ 	case PHY_INTERFACE_MODE_10GBASER:
+ 	case PHY_INTERFACE_MODE_10GKR:
+@@ -662,6 +663,7 @@ static int phylink_parse_mode(struct phy
+ 			fallthrough;
+ 		case PHY_INTERFACE_MODE_USXGMII:
+ 		case PHY_INTERFACE_MODE_10GKR:
++		case PHY_INTERFACE_MODE_HSGMII:
+ 		case PHY_INTERFACE_MODE_10GBASER:
+ 			phylink_set(pl->supported, 10baseT_Half);
+ 			phylink_set(pl->supported, 10baseT_Full);
 --- a/include/linux/phy.h
 +++ b/include/linux/phy.h
-@@ -138,6 +138,7 @@ typedef enum {
+@@ -139,6 +139,7 @@ typedef enum {
  	PHY_INTERFACE_MODE_XGMII,
  	PHY_INTERFACE_MODE_XLGMII,
  	PHY_INTERFACE_MODE_MOCA,
@@ -22,7 +41,7 @@ Submitted-by: Birger Koblitz <git@birger-koblitz.de>
  	PHY_INTERFACE_MODE_QSGMII,
  	PHY_INTERFACE_MODE_TRGMII,
  	PHY_INTERFACE_MODE_100BASEX,
-@@ -243,6 +244,8 @@ static inline const char *phy_modes(phy_
+@@ -244,6 +245,8 @@ static inline const char *phy_modes(phy_
  		return "xlgmii";
  	case PHY_INTERFACE_MODE_MOCA:
  		return "moca";

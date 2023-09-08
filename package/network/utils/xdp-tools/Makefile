@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xdp-tools
-PKG_RELEASE:=$(AUTORELEASE)
+PKG_RELEASE:=1
 PKG_VERSION:=1.2.9
 PKG_HASH:=159ed8d3c8195d812ec3cde83bd736245a72743af372998320d39c2ba69ab142
 
@@ -94,7 +94,7 @@ MAKE_VARS += \
 
 define Build/Configure
 	$(call Build/Configure/Default)
-	echo "BPF_CFLAGS += -I$(BPF_HEADERS_DIR)/tools/lib" >> $(PKG_BUILD_DIR)/config.mk
+	echo "BPF_CFLAGS += -I$(BPF_HEADERS_DIR)/tools/lib -fno-stack-protector" >> $(PKG_BUILD_DIR)/config.mk
 endef
 
 define Build/InstallDev
