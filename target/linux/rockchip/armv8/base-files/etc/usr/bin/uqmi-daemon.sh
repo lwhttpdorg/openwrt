@@ -8,7 +8,7 @@ function set_device_operating_mode() {
 }
 
 function ping_domain() {
-	local domain=qq.com
+	local domain=223.5.5.5
 	local retries=6
 	local packets_responded=0
 
