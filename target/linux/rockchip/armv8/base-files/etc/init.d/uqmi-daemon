@@ -1,0 +1,8 @@
+#!/bin/sh /etc/rc.common
+
+START=97
+
+start() {
+	echo "uqmi daemon is started"
+	/usr/bin/uqmi-daemon.sh &
+}
