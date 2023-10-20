@@ -1,20 +1,20 @@
 <img src="https://openwrt.org/_media/logo.png" alt="logo" width="274" height="84" align="right">
 
-# OpenWrtÏîÄ¿
+# OpenWrté¡¹ç›®
 
-Õâ¸öÏîÄ¿fork×Ô[OpenWrt](https://github.com/openwrt/openwrt)
+è¿™ä¸ªé¡¹ç›®forkè‡ª[OpenWrt](https://github.com/openwrt/openwrt)
 
-Ä¬ÈÏµÇÂ¼µØÖ·: http://172.16.0.1, ÓÃ»§Ãû: __root__, ÃÜÂë: ÎŞ.
+é»˜è®¤ç™»å½•åœ°å€: http://172.16.0.1, ç”¨æˆ·å: __root__, å¯†ç : æ— .
 
-## ÈçºÎ±àÒë×Ô¼ºĞèÒªµÄ OpenWrt ¹Ì¼ş
-### ¿ìËÙ¿ªÊ¼
-1. Ö´ĞĞÃüÁî `git clone -b <branch> --single-branch https://github.com/SandroDickens/openwrt.git` ÏÂÔØÔ´Âë.
-2. Ö´ĞĞÃüÁî `cd openwrt` ½øÈëÔ´ÂëÄ¿Â¼.
-3. Ö´ĞĞÃüÁî `./scripts/feeds update -a` »ñÈ¡feeds.conf / feeds.conf.defaultÖĞ¶¨ÒåµÄ×îĞÂµÄ°ü.
-4. Ö´ĞĞÃüÁî `./scripts/feeds install -a` to install symlinks for all obtained packages into package/feeds/
-5. Ö´ĞĞÃüÁî `make menuconfig` Ñ¡ÔñÄãĞèÒªµÄtoolchain, target systemºÍfirmware°üÉú³ÉÅäÖÃÎÄ¼ş.
-6. Ö´ĞĞÃüÁî `make download -j$(nproc) V=sc` ÏÂÔØÔ´Âë¡¢½»²æ±àÒë¹¤¾ßÁ´¡¢LinuxÄÚºËµÈ(ĞèÒªÄÜ·ÃÎÊ¹ú¼Ê»¥ÁªÍø, ´Ë¹ı³Ì¿ÉÄÜ»áÓĞ²¿·ÖÎÄ¼şÏÂÔØÊ§°Ü, Îª±£ÊØÆğ¼û×îºÃÖ´ĞĞ2±é).
-7. Ö´ĞĞÃüÁî `make -j$(nproc) V=sc` ±àÒë¹Ì¼ş.
+## å¦‚ä½•ç¼–è¯‘è‡ªå·±éœ€è¦çš„ OpenWrt å›ºä»¶
+### å¿«é€Ÿå¼€å§‹
+1. æ‰§è¡Œå‘½ä»¤ `git clone -b <branch> --single-branch https://github.com/SandroDickens/openwrt.git` ä¸‹è½½æºç .
+2. æ‰§è¡Œå‘½ä»¤ `cd openwrt` è¿›å…¥æºç ç›®å½•.
+3. æ‰§è¡Œå‘½ä»¤ `./scripts/feeds update -a` è·å–feeds.conf / feeds.conf.defaultä¸­å®šä¹‰çš„æœ€æ–°çš„åŒ….
+4. æ‰§è¡Œå‘½ä»¤ `./scripts/feeds install -a` to install symlinks for all obtained packages into package/feeds/
+5. æ‰§è¡Œå‘½ä»¤ `make menuconfig` é€‰æ‹©ä½ éœ€è¦çš„toolchain, target systemå’ŒfirmwareåŒ…ç”Ÿæˆé…ç½®æ–‡ä»¶.
+6. æ‰§è¡Œå‘½ä»¤ `make download -j$(nproc) V=sc` ä¸‹è½½æºç ã€äº¤å‰ç¼–è¯‘å·¥å…·é“¾ã€Linuxå†…æ ¸ç­‰(éœ€è¦èƒ½è®¿é—®å›½é™…äº’è”ç½‘, æ­¤è¿‡ç¨‹å¯èƒ½ä¼šæœ‰éƒ¨åˆ†æ–‡ä»¶ä¸‹è½½å¤±è´¥, ä¸ºä¿å®ˆèµ·è§æœ€å¥½æ‰§è¡Œ2é).
+7. æ‰§è¡Œå‘½ä»¤ `make -j$(nproc) V=sc` ç¼–è¯‘å›ºä»¶.
 
-## Ğí¿É
+## è®¸å¯
 OpenWrt is licensed under [GPL-3.0-only](https://spdx.org/licenses/GPL-3.0-only.html).
