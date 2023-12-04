@@ -15,38 +15,9 @@
  		wifi: wifi@18000000 {
  			compatible = "mediatek,mt7986-wmac";
  			resets = <&watchdog MT7986_TOPRGU_CONSYS_SW_RST>;
-@@ -603,6 +611,28 @@
- 		};
- 	};
- 
-+	afe: audio-controller@11210000 {
-+		compatible = "mediatek,mt79xx-audio";
-+		reg = <0 0x11210000 0 0x9000>;
-+		interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&infracfg_ao CK_INFRA_AUD_BUS_CK>,
-+			 <&infracfg_ao CK_INFRA_AUD_26M_CK>,
-+			 <&infracfg_ao CK_INFRA_AUD_L_CK>,
-+			 <&infracfg_ao CK_INFRA_AUD_AUD_CK>,
-+			 <&infracfg_ao CK_INFRA_AUD_EG2_CK>;
-+		clock-names = "aud_bus_ck",
-+				  "aud_26m_ck",
-+				  "aud_l_ck",
-+				  "aud_aud_ck",
-+				  "aud_eg2_ck";
-+		assigned-clocks = <&topckgen CK_TOP_A1SYS_SEL>,
-+				  <&topckgen CK_TOP_AUD_L_SEL>,
-+				  <&topckgen CK_TOP_A_TUNER_SEL>;
-+		assigned-clock-parents = <&topckgen CK_TOP_APLL2_D4>,
-+					 <&topckgen CK_TOP_CB_APLL2_196M>,
-+					 <&topckgen CK_TOP_APLL2_D4>;
-+	};
-+
- 	thermal-zones {
- 		cpu_thermal: cpu-thermal {
- 			polling-delay-passive = <1000>;
 --- a/dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts
-@@ -0,0 +1,708 @@
+@@ -0,0 +1,704 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright (C) 2021 MediaTek Inc.
@@ -148,17 +119,6 @@
 +		regulator-max-microvolt = <5000000>;
 +		regulator-boot-on;
 +		regulator-always-on;
-+	};
-+
-+	sound {
-+		compatible = "mediatek,mt7986-wm8960-machine";
-+		mediatek,platform = <&afe>;
-+		audio-routing = "Headphone", "HP_L",
-+				"Headphone", "HP_R",
-+				"LINPUT1", "AMIC",
-+				"RINPUT1", "AMIC";
-+		mediatek,audio-codec = <&wm8960>;
-+		status = "okay";
 +	};
 +};
 +
@@ -453,6 +413,13 @@
 +		mux {
 +			function = "uart";
 +			groups = "uart1";
++		};
++	};
++
++	uart2_pins: uart2-pins {
++		mux {
++			function = "uart";
++			groups = "uart2";
 +		};
 +	};
 +
