@@ -59,7 +59,10 @@ DEFAULT_PACKAGES.router:=\
 	kmod-nft-offload \
 	ipv6helper \
 	ppp \
-	ppp-mod-pppoe
+	ppp-mod-pppoe \
+	block-mount \
+	luci \
+	luci-app-opkg
 
 ifneq ($(DUMP),)
   all: dumpinfo
