@@ -123,7 +123,7 @@
 				reg = <4>;
 			};
 
-			switch@0 {
+			switch@1f {
 				compatible = "qca,qca8327";
 				#address-cells = <1>;
 				#size-cells = <0>;
