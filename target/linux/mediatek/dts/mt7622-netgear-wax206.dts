@@ -147,7 +147,7 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		switch@0 {
+		switch@1f {
 			compatible = "mediatek,mt7531";
 			#interrupt-cells = <1>;
 			interrupt-controller;
