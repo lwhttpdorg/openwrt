@@ -293,7 +293,7 @@
 +/ {
 +	#address-cells = <1>;
 +	#size-cells = <1>;
-+	model = "Bananapi BPi-R3 Mini";
++	model = "Bananapi BPi-R3 mini";
 +	compatible = "mediatek,mt7986", "mediatek,mt7986-rfb";
 +
 +	chosen {

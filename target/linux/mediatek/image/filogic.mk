@@ -176,7 +176,7 @@ TARGET_DEVICES += bananapi_bpi-r3
 
 define Device/bananapi_bpi-r3-mini
   DEVICE_VENDOR := Bananapi
-  DEVICE_MODEL := BPi-R3 Mini
+  DEVICE_MODEL := BPi-R3 mini
   DEVICE_DTS := mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_DIR := $(DTS_DIR)/
   DEVICE_DTC_FLAGS := --pad 4096
