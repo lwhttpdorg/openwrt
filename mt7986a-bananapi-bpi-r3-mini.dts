@@ -34,15 +34,6 @@
 		stdout-path = "serial0:115200n8";
 	};
 
-	fan: pwm-fan {
-		compatible = "pwm-fan";
-		#cooling-cells = <2>;
-		/* cooling level (0, 1, 2) - pwm inverted */
-		cooling-levels = <255 96 0>;
-		pwms = <&pwm 0 10000 0>;
-		status = "okay";
-	};
-
 	memory {
 		reg = <0 0x40000000 0 0x80000000>;
 	};
@@ -106,28 +97,6 @@
 
 &auxadc {
 	status = "okay";
-};
-
-&cpu_thermal {
-	cooling-maps {
-		cpu-active-high {
-			/* active: set fan to cooling level 2 */
-			cooling-device = <&fan 2 2>;
-			trip = <&cpu_trip_active_high>;
-		};
-
-		cpu-active-med {
-			/* active: set fan to cooling level 1 */
-			cooling-device = <&fan 1 1>;
-			trip = <&cpu_trip_active_med>;
-		};
-
-		cpu-active-low {
-			/* active: set fan to cooling level 0 */
-			cooling-device = <&fan 0 0>;
-			trip = <&cpu_trip_active_low>;
-		};
-	};
 };
 
 &watchdog {
