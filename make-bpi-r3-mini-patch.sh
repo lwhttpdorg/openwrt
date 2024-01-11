@@ -18,5 +18,8 @@ sed -i '1a +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts' 
 # merge diff
 cat ./mt7986a.patch > ./196-dts-mt7986a-bpi-r3-mini.patch
 cat ./mt7986a-bananapi-bpi-r3-mini.patch >> ./196-dts-mt7986a-bpi-r3-mini.patch
+rm ./mt7986a.patch
+rm ./mt7986a-bananapi-bpi-r3-mini.patch
+
 # copy to patches directory
 cp ./196-dts-mt7986a-bpi-r3-mini.patch target/linux/mediatek/patches-5.15/196-dts-mt7986a-bpi-r3-mini.patch
