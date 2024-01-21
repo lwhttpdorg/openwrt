@@ -10,7 +10,6 @@
 #sed -i -e 's/PKG_HASH:=[0-9a-f]\+/PKG_HASH:=72d2f51805c47150066c103754c75fddb2c19d48c9219fa33d1e46696c841dbb/' $GOLANG_MAKEFILE
 
 git apply ./feeds.diff
-git apply ./golang-version.diff
 
 ./scripts/feeds install -a
 ./scripts/feeds install -a
