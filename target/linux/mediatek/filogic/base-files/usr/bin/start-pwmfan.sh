@@ -6,7 +6,7 @@ if [ ! -d /sys/class/pwm/pwmchip0 ]; then
 fi
 
 if [ ! -d /sys/class/pwm/pwmchip0/pwm0 ]; then
-    echo -n 0 >/sys/class/pwm/pwmchip0/export
+    echo -n 0 > /sys/class/pwm/pwmchip0/export
 fi
 
 sleep 1
@@ -17,7 +17,7 @@ done
 
 pwm_enabled=$(cat /sys/class/pwm/pwmchip0/pwm0/enable)
 if [ ${pwm_enabled} -eq 1 ]; then
-    echo -n 0 >/sys/class/pwm/pwmchip0/pwm0/enable
+    echo -n 0 > /sys/class/pwm/pwmchip0/pwm0/enable
 fi
 
 wifi0_enabled=0
@@ -30,8 +30,9 @@ if [ -e /sys/class/ieee80211/phy1/hwmon2/temp1_input ]; then
     wifi1_enabled=1
 fi
 
-echo -n 50000 >/sys/class/pwm/pwmchip0/pwm0/period
-echo -n 1 >/sys/class/pwm/pwmchip0/pwm0/enable
+echo -n 50000 > /sys/class/pwm/pwmchip0/pwm0/period
+echo -n 1     > /sys/class/pwm/pwmchip0/pwm0/enable
+echo -n 50000 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
 
 # CPU
 declare -a cpu_temp_set=(60000 55000 50000 45000 40000 35000 30000)
@@ -59,7 +60,7 @@ while true; do
     FOUND=0
     # CPU
     for ((i = 0; i < ${#cpu_temp_set[@]}; i++)); do
-        if [ ${cpu_temp} -gt ${cpu_temp_set[$i]} ]; then
+        if [ ${cpu_temp} -gt ${cpu_temp_set[${i}]} ]; then
             cpu_pwm_duty=${pwm_duty_set[${i}]}
             FOUND=1
             break
@@ -68,7 +69,7 @@ while true; do
 
     # WiFi
     for ((i = 0; i < ${#wifi_temp_set[@]}; i++)); do
-        if [[ ${wifi0_temp} -gt ${wifi_temp_set[$i]} || ${wifi1_temp} -gt ${wifi_temp_set[$i]} ]]; then
+        if [[ ${wifi0_temp} -gt ${wifi_temp_set[${i}]} || ${wifi1_temp} -gt ${wifi_temp_set[${i}]} ]]; then
             wifi_pwm_duty=${pwm_duty_set[${i}]}
             FOUND=1
             break
@@ -82,7 +83,7 @@ while true; do
     fi
 
     if [ ${FOUND} == 1 ]; then
-        echo ${pwm_duty} >/sys/class/pwm/pwmchip0/pwm0/duty_cycle
+        echo -n ${pwm_duty} > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
     fi
     sleep 3s
 done
