@@ -82,8 +82,7 @@ while true; do
     fi
 
     if [ ${FOUND} == 1 ]; then
-        echo -n ${pwm_duty} >/sys/class/pwm/pwmchip0/pwm0/duty_cycle
+        echo ${pwm_duty} >/sys/class/pwm/pwmchip0/pwm0/duty_cycle
     fi
     sleep 3s
 done
-
