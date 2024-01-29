@@ -1,3 +1,38 @@
+--- a/feeds/packages/libs/libxcrypt/Makefile
++++ b/feeds/packages/libs/libxcrypt/Makefile
+@@ -1,12 +1,12 @@
+ include $(TOPDIR)/rules.mk
+ 
+ PKG_NAME:=libxcrypt
+-PKG_VERSION:=4.4.17
++PKG_VERSION:=4.4.36
+ PKG_RELEASE:=1
+ 
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+ PKG_SOURCE_URL:=https://codeload.github.com/besser82/libxcrypt/tar.gz/v$(PKG_VERSION)?
+-PKG_HASH:=7665168d0409574a03f7b484682e68334764c29c21ca5df438955a381384ca07
++PKG_HASH:=e5e1f4caee0a01de2aee26e3138807d6d3ca2b8e67287966d1fefd65e1fd8943
+ 
+ PKG_MAINTAINER:=
+ PKG_LICENSE:=LGPL-2.1-or-later
+--- a/feeds/packages/libs/libwebsockets/Makefile
++++ b/feeds/packages/libs/libwebsockets/Makefile
+@@ -8,13 +8,13 @@
+ include $(TOPDIR)/rules.mk
+ 
+ PKG_NAME:=libwebsockets
+-PKG_VERSION:=4.2.1
++PKG_VERSION:=4.3.3
+ PKG_RELEASE:=2
+ 
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+ PKG_SOURCE_URL:=https://codeload.github.com/warmcat/libwebsockets/tar.gz/v$(PKG_VERSION)?
+-PKG_HASH:=842da21f73ccba2be59e680de10a8cce7928313048750eb6ad73b6fa50763c51
++PKG_HASH:=6fd33527b410a37ebc91bb64ca51bdabab12b076bc99d153d7c5dd405e4bdf90
+ 
+ PKG_SOURCE_VERSION:=v$(PKG_VERSION)
+ 
 --- a/feeds/packages/lang/golang/golang/Makefile
 +++ b/feeds/packages/lang/golang/golang/Makefile
 @@ -7,8 +7,8 @@
@@ -20,38 +55,3 @@
  
  PKG_MAINTAINER:=Jeffery To <jeffery.to@gmail.com>
  PKG_LICENSE:=BSD-3-Clause
---- feeds/packages/libs/libxcrypt/Makefile	2024-01-27 15:55:24.956612726 +0800
-+++ ./libxcrypt-Makefile	2024-01-27 19:20:13.688118161 +0800
-@@ -1,12 +1,12 @@
- include $(TOPDIR)/rules.mk
- 
- PKG_NAME:=libxcrypt
--PKG_VERSION:=4.4.17
-+PKG_VERSION:=4.4.36
- PKG_RELEASE:=1
- 
- PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
- PKG_SOURCE_URL:=https://codeload.github.com/besser82/libxcrypt/tar.gz/v$(PKG_VERSION)?
--PKG_HASH:=7665168d0409574a03f7b484682e68334764c29c21ca5df438955a381384ca07
-+PKG_HASH:=e5e1f4caee0a01de2aee26e3138807d6d3ca2b8e67287966d1fefd65e1fd8943
- 
- PKG_MAINTAINER:=
- PKG_LICENSE:=LGPL-2.1-or-later
---- feeds/packages/libs/libwebsockets/Makefile	2024-01-27 15:55:24.956612726 +0800
-+++ libwebsockets-Makefile	2024-01-27 19:23:01.450827146 +0800
-@@ -8,13 +8,13 @@
- include $(TOPDIR)/rules.mk
- 
- PKG_NAME:=libwebsockets
--PKG_VERSION:=4.2.1
-+PKG_VERSION:=4.3.3
- PKG_RELEASE:=2
- 
- PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
- PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
- PKG_SOURCE_URL:=https://codeload.github.com/warmcat/libwebsockets/tar.gz/v$(PKG_VERSION)?
--PKG_HASH:=842da21f73ccba2be59e680de10a8cce7928313048750eb6ad73b6fa50763c51
-+PKG_HASH:=6fd33527b410a37ebc91bb64ca51bdabab12b076bc99d153d7c5dd405e4bdf90
- 
- PKG_SOURCE_VERSION:=v$(PKG_VERSION)
- 
