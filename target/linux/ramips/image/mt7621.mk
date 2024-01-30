@@ -9,6 +9,14 @@ DEFAULT_SOC := mt7621
 
 DEVICE_VARS += ELECOM_HWNAME LINKSYS_HWNAME DLINK_HWID
 
+define Build/append-dlink-covr-metadata
+	echo -ne '{"supported_devices": "$(1)", "firmware": "' > $@metadata.tmp
+	$(MKHASH) md5 "$@" | head -c32 >> $@metadata.tmp
+	echo '"}' >> $@metadata.tmp
+	fwtool -I $@metadata.tmp $@
+	rm $@metadata.tmp
+endef
+
 define Build/arcadyan-trx
 	echo -ne "hsqs" > $@.hsqs
 	$(eval trx_magic=$(word 1,$(1)))
@@ -609,6 +617,31 @@ define Device/cudy_x6-v2
   SUPPORTED_DEVICES += cudy,x6 R30
 endef
 TARGET_DEVICES += cudy_x6-v2
+
+define Device/dlink_covr-x1860-a1
+  $(Device/dsa-migration)
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  KERNEL_SIZE := 8192k
+  IMAGE_SIZE := 40960k
+  DEVICE_VENDOR := D-Link
+  DEVICE_MODEL := COVR-X1860
+  DEVICE_VARIANT := A1
+  DEVICE_PACKAGES := kmod-mt7915-firmware
+  UBINIZE_OPTS := -E 5
+  KERNEL_LOADADDR := 0x82000000
+  KERNEL := kernel-bin | relocate-kernel 0x80001000 | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb | \
+	append-squashfs4-fakeroot
+  IMAGES += factory.bin recovery.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/recovery.bin := append-kernel | pad-to $$(KERNEL_SIZE) | \
+	append-ubi | check-size
+  IMAGE/factory.bin := $$(IMAGE/recovery.bin) | \
+	append-dlink-covr-metadata $$(DEVICE_MODEL) | \
+	dlink-sge-image $$(DEVICE_MODEL)
+endef
+TARGET_DEVICES += dlink_covr-x1860-a1
 
 define Device/dlink_dap-1620-b1
   DEVICE_VENDOR := D-Link
@@ -1947,6 +1980,20 @@ define Device/renkforce_ws-wn530hp3-a
 endef
 TARGET_DEVICES += renkforce_ws-wn530hp3-a
 
+define Device/rostelecom_rt-fe-1a
+  $(Device/sercomm_dxx)
+  IMAGE_SIZE := 24576k
+  SERCOMM_HWID := CX4
+  SERCOMM_HWVER := 11300
+  SERCOMM_SWVER := 2010
+  DEVICE_VENDOR := Rostelecom
+  DEVICE_MODEL := RT-FE-1A
+  DEVICE_ALT0_VENDOR := Sercomm
+  DEVICE_ALT0_MODEL := RT-FE-1A
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615-firmware
+endef
+TARGET_DEVICES += rostelecom_rt-fe-1a
+
 define Device/rostelecom_rt-sf-1
   $(Device/sercomm_dxx)
   IMAGE_SIZE := 32768k
@@ -1973,6 +2020,7 @@ TARGET_DEVICES += samknows_whitebox-v8
 
 define Device/sercomm_na502
   $(Device/nand)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 20480k
   DEVICE_VENDOR := SERCOMM
   DEVICE_MODEL := NA502
