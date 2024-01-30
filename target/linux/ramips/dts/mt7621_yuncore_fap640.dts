@@ -129,8 +129,16 @@
 					#address-cells = <1>;
 					#size-cells = <1>;
 
-					macaddr_factory_0004: macaddr@0004 {
-						reg = <0x0004 0x6>;
+					eeprom_factory_0: eeprom@0 {
+						reg = <0x0 0xe00>;
+					};
+
+					precal_factory_e10: precal@e10 {
+						reg = <0xe10 0x19c10>;
+					};
+
+					macaddr_factory_4: macaddr@4 {
+						reg = <0x4 0x6>;
 					};
 
 					macaddr_factory_e006: macaddr@e006 {
@@ -156,7 +164,8 @@
 	wifi@0,0 {
 		compatible = "mediatek,mt76";
 		reg = <0x0000 0 0 0 0>;
-		mediatek,mtd-eeprom = <&factory 0x0>;
+		nvmem-cells = <&eeprom_factory_0>, <&precal_factory_e10>;
+		nvmem-cell-names = "eeprom", "precal";
 		mediatek,disable-radar-background;
 	};
 };
@@ -171,7 +180,7 @@
 	label = "wan";
 	phy-handle = <&ethphy4>;
 
-	nvmem-cells = <&macaddr_factory_0004>;
+	nvmem-cells = <&macaddr_factory_4>;
 	nvmem-cell-names = "mac-address";
 };
 
