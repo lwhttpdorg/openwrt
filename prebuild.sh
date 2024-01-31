@@ -10,6 +10,7 @@
 #sed -i -e 's/PKG_HASH:=[0-9a-f]\+/PKG_HASH:=72d2f51805c47150066c103754c75fddb2c19d48c9219fa33d1e46696c841dbb/' $GOLANG_MAKEFILE
 
 rm -rf ./feeds/packages/lang/golang/golang/patches
+rm -rf ./feeds/packages/libs/libwebsockets/patches
 git apply ./feeds.diff
 
 ./scripts/feeds install -a
