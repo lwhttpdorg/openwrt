@@ -6,4 +6,3 @@ start() {
 	echo "fa-pwmfan started"
 	/usr/bin/start-rk3328-pwm-fan.sh > /dev/null&
 }
-

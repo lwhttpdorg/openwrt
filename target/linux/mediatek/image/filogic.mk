@@ -234,12 +234,12 @@ TARGET_DEVICES += bananapi_bpi-r3
 
 define Device/bananapi_bpi-r3-mini
   DEVICE_VENDOR := Bananapi
-  DEVICE_MODEL := BPi-R3 Mini
+  DEVICE_MODEL := BPi-R3 mini
   DEVICE_DTS := mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_DIR := $(DTS_DIR)/
   DEVICE_DTC_FLAGS := --pad 4096
   DEVICE_DTS_LOADADDR := 0x43f00000
-  DEVICE_PACKAGES := kmod-hwmon-pwmfan kmod-mmc kmod-i2c-gpio kmod-mt7986-firmware kmod-usb3 kmod-nvme e2fsprogs f2fsck mkf2fs mt7986-wo-firmware kmod-usb-net-qmi-wwan kmod-usb-serial-option uqmi
+  DEVICE_PACKAGES := kmod-hwmon-pwmfan kmod-mmc kmod-i2c-gpio kmod-mt7986-firmware kmod-usb3 kmod-nvme e2fsprogs f2fsck mkf2fs mt7986-wo-firmware
   IMAGES := sysupgrade.itb
   KERNEL_LOADADDR := 0x44000000
   KERNEL := kernel-bin | gzip
