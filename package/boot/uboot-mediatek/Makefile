@@ -408,7 +408,7 @@ define U-Boot/mt7986_bananapi_bpi-r3-nor
 endef
 
 define U-Boot/mt7986_bananapi_bpi-r3-mini-emmc
-  NAME:=BananaPi BPi-R3 Mini
+  NAME:=BananaPi BPi-R3 mini
   BUILD_SUBTARGET:=filogic
   BUILD_DEVICES:=bananapi_bpi-r3-mini
   UBOOT_CONFIG:=mt7986a_bpi-r3-mini-emmc
@@ -420,7 +420,7 @@ define U-Boot/mt7986_bananapi_bpi-r3-mini-emmc
 endef
 
 define U-Boot/mt7986_bananapi_bpi-r3-mini-snand
-  NAME:=BananaPi BPi-R3 Mini
+  NAME:=BananaPi BPi-R3 mini
   BUILD_SUBTARGET:=filogic
   BUILD_DEVICES:=bananapi_bpi-r3-mini
   UBOOT_CONFIG:=mt7986a_bpi-r3-mini-snand
@@ -430,6 +430,7 @@ define U-Boot/mt7986_bananapi_bpi-r3-mini-snand
   BL2_DDRTYPE:=ddr4
   DEPENDS:=+trusted-firmware-a-mt7986-spim-nand-ddr4
 endef
+
 define U-Boot/mt7986_glinet_gl-mt6000
   NAME:=GL.iNet GL-MT6000
   BUILD_SUBTARGET:=filogic
