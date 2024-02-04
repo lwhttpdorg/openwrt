@@ -23,3 +23,4 @@ rm ./mt7986a-bananapi-bpi-r3-mini.patch
 
 # copy to patches directory
 cp ./196-dts-mt7986a-bpi-r3-mini.patch target/linux/mediatek/patches-5.15/196-dts-mt7986a-bpi-r3-mini.patch
+rm ./196-dts-mt7986a-bpi-r3-mini.patch
