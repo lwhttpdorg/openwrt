@@ -309,7 +309,8 @@ generate_static_system() {
 		set system.@system[-1].urandom_seed='0'
 		set system.@system[-1].zonename='Asia/Shanghai'
 		set system.@system[-1].conloglevel='4'
-		set system.@system[-1].cronloglevel '9'
+		set system.@system[-1].cronloglevel='9'
+		set firewall.@defaults[0].flow_offloading='1'
 
 		delete system.ntp
 		set system.ntp='timeserver'
