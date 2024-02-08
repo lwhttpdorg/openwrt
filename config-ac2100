@@ -6448,7 +6448,7 @@ CONFIG_PACKAGE_partx-utils=y
 CONFIG_PACKAGE_vim-full=y
 # CONFIG_PACKAGE_vim-fuller is not set
 # CONFIG_PACKAGE_vim-help is not set
-# CONFIG_PACKAGE_vim-runtime is not set
+CONFIG_PACKAGE_vim-runtime=y
 # CONFIG_PACKAGE_zile is not set
 # end of Editors
 
