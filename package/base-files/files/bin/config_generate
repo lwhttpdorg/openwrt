@@ -330,6 +330,7 @@ generate_static_system() {
 		add_list system.ntp.server='3.cn.pool.ntp.org'
 
 		set firewall.@defaults[0].flow_offloading='1'
+		set nft-qos.default.limit_enable='0'
 	EOF
 
 	if json_is_a system object; then
