@@ -1,4 +1,5 @@
 REQUIRE_IMAGE_METADATA=1
+RAMFS_COPY_BIN='fitblk'
 
 asus_initial_setup()
 {
@@ -80,18 +81,18 @@ platform_do_upgrade() {
 		nand_do_upgrade "$1"
 		;;
 	bananapi,bpi-r3|\
-	bananapi,bpi-r3-mini)
-		local rootdev="$(cmdline_get_var root)"
-		rootdev="${rootdev##*/}"
-		rootdev="${rootdev%p[0-9]*}"
-		case "$rootdev" in
-		mmc*)
-			CI_ROOTDEV="$rootdev"
-			CI_KERNPART="production"
+	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r4)
+		[ -e /dev/fit0 ] && fitblk /dev/fit0
+		[ -e /dev/fitrw ] && fitblk /dev/fitrw
+		bootdev="$(fitblk_get_bootdev)"
+		case "$bootdev" in
+		mmcblk*)
+			EMMC_KERN_DEV="/dev/$bootdev"
 			emmc_do_upgrade "$1"
 			;;
 		mtdblock*)
-			PART_NAME="fit"
+			PART_NAME="/dev/mtd${bootdev:8}"
 			default_do_upgrade "$1"
 			;;
 		ubiblock*)
@@ -112,6 +113,7 @@ platform_do_upgrade() {
 			;;
 		esac
 		;;
+	cudy,re3000-v1|\
 	cudy,wr3000-v1|\
 	yuncore,ax835)
 		default_do_upgrade "$1"
@@ -176,7 +178,7 @@ platform_check_image() {
 
 	case "$board" in
 	bananapi,bpi-r3|\
-	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r4|\
 	cmcc,rax3000m)
 		[ "$magic" != "d00dfeed" ] && {
 			echo "Invalid image type."
@@ -195,11 +197,18 @@ platform_check_image() {
 
 platform_copy_config() {
 	case "$(board_name)" in
-	bananapi,bpi-r3|\
-	bananapi,bpi-r3-mini|\
 	cmcc,rax3000m)
 		case "$(cmdline_get_var root)" in
 		/dev/mmc*)
+			emmc_copy_config
+			;;
+		esac
+		;;
+	bananapi,bpi-r3|\
+	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r4)
+		case "$(fitblk_get_bootdev)" in
+		mmcblk*)
 			emmc_copy_config
 			;;
 		esac

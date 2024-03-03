@@ -6,9 +6,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=$(PROJECT_GIT)/project/firmware/qca-wireless.git
-PKG_SOURCE_DATE:=2024-01-06
-PKG_SOURCE_VERSION:=71f45cff8944405b7cc2bf5c19df2bd8fe7f2421
-PKG_MIRROR_HASH:=90c3c1659c54cdb4685d0a71633746c1000230e459801eb8ce12c805a994cc37
+PKG_SOURCE_DATE:=2024-02-25
+PKG_SOURCE_VERSION:=fc30aeeb8ec5d069710a446f4eb5e30fc26145c1
+PKG_MIRROR_HASH:=7fe83e3f36541444e0385a56fa8a048772d0531e16787cc10bce29775c7db235
 
 PKG_FLAGS:=nonshared
 
@@ -28,13 +28,17 @@ endef
 # <https://wireless.wiki.kernel.org/en/users/drivers/ath10k/boardfiles>
 
 ALLWIFIBOARDS:= \
+	8devices_mango \
 	arcadyan_aw1000 \
 	buffalo_wxr-5950ax12 \
+	cmcc_rm2-6 \
 	compex_wpq873 \
 	dynalink_dl-wrx36 \
 	edgecore_eap102 \
 	edimax_cax1800 \
 	linksys_mx4200 \
+	linksys_mx5300 \
+	netgear_lbr20 \
 	netgear_rax120v2 \
 	netgear_wax218 \
 	netgear_wax620 \
@@ -84,12 +88,14 @@ define ipq-wifi-install-one
     $(call ipq-wifi-install-one-to,$(1),$(2),QCA9984/hw1.0),\
   $(if $(filter $(suffix $(1)),.QCA99X0 .qca99x0),\
     $(call ipq-wifi-install-one-to,$(1),$(2),QCA99X0/hw2.0),\
-  $(if $(filter $(suffix $(1)),.IPQ8074 .ipq8074 .ipq8174),\
+  $(if $(filter $(suffix $(1)),.IPQ6018 .ipq6018),\
+    $(call ipq-wifi-install-ath11-one-to,$(1),$(2),IPQ6018/hw1.0),\
+  $(if $(filter $(suffix $(1)),.IPQ8074 .ipq8074),\
     $(call ipq-wifi-install-ath11-one-to,$(1),$(2),IPQ8074/hw2.0),\
   $(if $(filter $(suffix $(1)),.QCN9074 .qcn9074),\
     $(call ipq-wifi-install-ath11-one-to,$(1),$(2),QCN9074/hw1.0),\
     $(error Unrecognized board-file suffix '$(suffix $(1))' for '$(1)')\
-  )))))))
+  ))))))))
 
 endef
 # Blank line required at end of above define due to foreach context
@@ -139,13 +145,17 @@ endef
 # Board files should follow this name structure:
 #   board-<devicename>.<qca4019|qca9888|qca9889|qca9984|qca99x0|ipq8074>
 
+$(eval $(call generate-ipq-wifi-package,8devices_mango,8devices Mango))
 $(eval $(call generate-ipq-wifi-package,arcadyan_aw1000,Arcadyan AW1000))
 $(eval $(call generate-ipq-wifi-package,buffalo_wxr-5950ax12,Buffalo WXR-5950AX12))
+$(eval $(call generate-ipq-wifi-package,cmcc_rm2-6,CMCC RM2-6))
 $(eval $(call generate-ipq-wifi-package,compex_wpq873,Compex WPQ-873))
 $(eval $(call generate-ipq-wifi-package,dynalink_dl-wrx36,Dynalink DL-WRX36))
 $(eval $(call generate-ipq-wifi-package,edgecore_eap102,Edgecore EAP102))
 $(eval $(call generate-ipq-wifi-package,edimax_cax1800,Edimax CAX1800))
 $(eval $(call generate-ipq-wifi-package,linksys_mx4200,Linksys MX4200))
+$(eval $(call generate-ipq-wifi-package,linksys_mx5300,Linksys MX5300))
+$(eval $(call generate-ipq-wifi-package,netgear_lbr20,Netgear LBR20))
 $(eval $(call generate-ipq-wifi-package,netgear_rax120v2,Netgear RAX120v2))
 $(eval $(call generate-ipq-wifi-package,netgear_wax218,Netgear WAX218))
 $(eval $(call generate-ipq-wifi-package,netgear_wax620,Netgear WAX620))
