@@ -107,7 +107,8 @@ platform_do_upgrade() {
 			;;
 		esac
 		;;
-	cudy,wr3000-v1)
+	cudy,wr3000-v1|\
+	cudy,re3000-v1)
 		default_do_upgrade "$1"
 		;;
 	glinet,gl-mt6000)
@@ -143,6 +144,11 @@ platform_do_upgrade() {
 		CI_ROOT_UBIPART=ubi
 		nand_do_upgrade "$1"
 		;;
+        zyxel,ex5601-t0-ubootmod)
+		CI_KERNPART="fit"
+		CI_ROOTPART="ubi_rootfs"
+                nand_do_upgrade "$1"
+                ;;
 	*)
 		nand_do_upgrade "$1"
 		;;

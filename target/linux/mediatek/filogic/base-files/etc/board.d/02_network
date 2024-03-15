@@ -61,6 +61,7 @@ mediatek_setup_interfaces()
 	mercusys,mr90x-v1)
 		ucidef_set_interfaces_lan_wan "lan0 lan1 lan2" eth1
 		;;
+	cudy,re3000-v1|\
 	netgear,wax220|\
 	ubnt,unifi-6-plus|\
 	zyxel,nwa50ax-pro)
@@ -75,6 +76,10 @@ mediatek_setup_interfaces()
 	xiaomi,redmi-router-ax6000-stock|\
 	xiaomi,redmi-router-ax6000-ubootmod)
 		ucidef_set_interfaces_lan_wan "lan2 lan3 lan4" wan
+		;;
+	zyxel,ex5601-t0-stock|\
+	zyxel,ex5601-t0-ubootmod)
+		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" eth1
 		;;
 	*)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" wan
