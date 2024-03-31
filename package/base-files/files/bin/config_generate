@@ -314,11 +314,11 @@ generate_static_system() {
 		set system.@system[-1].hostname='OpenWrt'
 		set system.@system[-1].timezone='CST-8'
 		set system.@system[-1].ttylogin='0'
-		set system.@system[-1].log_size='64'
+		set system.@system[-1].log_size='4'
 		set system.@system[-1].urandom_seed='0'
 		set system.@system[-1].zonename='Asia/Shanghai'
 		set system.@system[-1].conloglevel='4'
-		set system.@system[-1].cronloglevel '9'
+		set system.@system[-1].cronloglevel='9'
 
 		delete system.ntp
 		set system.ntp='timeserver'
@@ -328,6 +328,9 @@ generate_static_system() {
 		add_list system.ntp.server='1.cn.pool.ntp.org'
 		add_list system.ntp.server='2.cn.pool.ntp.org'
 		add_list system.ntp.server='3.cn.pool.ntp.org'
+
+		set firewall.@defaults[0].flow_offloading='1'
+		set nft-qos.default.limit_enable='0'
 	EOF
 
 	if json_is_a system object; then

@@ -7,7 +7,9 @@
 默认登录地址: http://172.16.0.1, 用户名: __root__, 密码: 无.
 
 ## 如何编译自己需要的 OpenWrt 固件
+
 ### 快速开始
+
 1. 执行命令 `git clone -b <branch> --single-branch https://github.com/SandroDickens/openwrt.git` 下载源码.
 2. 执行命令 `cd openwrt` 进入源码目录.
 3. 执行命令 `./scripts/feeds update -a` 获取feeds.conf / feeds.conf.default中定义的最新的包.

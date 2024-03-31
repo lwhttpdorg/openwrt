@@ -1,0 +1,8 @@
+#!/bin/sh /etc/rc.common
+
+START=96
+ 
+start() {
+	echo "pwmfan started"
+	/usr/bin/start-pwmfan.sh > /dev/null&
+}

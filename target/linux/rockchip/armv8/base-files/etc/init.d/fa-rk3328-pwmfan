@@ -1,9 +1,30 @@
 #!/bin/sh /etc/rc.common
-
 START=96
- 
-start() {
-	echo "fa-pwmfan started"
-	/usr/bin/start-rk3328-pwm-fan.sh > /dev/null&
+STOP=10
+
+restart() {
+    fan_pid=$(ps|grep start-rk3328-pwm-fan|grep -v grep|awk '{print $1}')
+    kill ${fan_pid}
+    sleep 1 # give time to shutdown
+    /usr/bin/start-rk3328-pwm-fan.sh > /dev/null&
 }
 
+start() {
+    fan_pid=$(ps|grep start-rk3328-pwm-fan|grep -v grep|awk '{print $1}')
+    if [ -z "${fan_pid}" ]
+    then
+        echo "PWM fan is started"
+        /usr/bin/start-rk3328-pwm-fan.sh > /dev/null&
+    else
+        echo "PWM fan is already running"
+    fi
+}
+
+stop() {
+    fan_pid=$(ps|grep start-rk3328-pwm-fan|grep -v grep|awk '{print $1}')
+    if [ -n "${fan_pid}" ]
+    then
+        kill ${fan_pid}
+    fi
+    return 0
+}

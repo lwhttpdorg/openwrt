@@ -1,4 +1,4 @@
---- a/dev/null
+--- /dev/null
 +++ b/configs/mt7986a_bpi-r3-mini-emmc_defconfig
 @@ -0,0 +1,138 @@
 +CONFIG_ARM=y
@@ -293,7 +293,7 @@
 +/ {
 +	#address-cells = <1>;
 +	#size-cells = <1>;
-+	model = "Bananapi BPi-R3 Mini";
++	model = "Bananapi BPi-R3 mini";
 +	compatible = "mediatek,mt7986", "mediatek,mt7986-rfb";
 +
 +	chosen {
