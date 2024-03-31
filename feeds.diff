@@ -1,21 +1,3 @@
---- a/feeds/packages/libs/libxcrypt/Makefile
-+++ b/feeds/packages/libs/libxcrypt/Makefile
-@@ -1,12 +1,12 @@
- include $(TOPDIR)/rules.mk
-
- PKG_NAME:=libxcrypt
--PKG_VERSION:=4.4.33
-+PKG_VERSION:=4.4.36
- PKG_RELEASE:=1
-
- PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
- PKG_SOURCE_URL:=https://github.com/besser82/libxcrypt/releases/download/v$(PKG_VERSION)
--PKG_HASH:=e87acf9c652c573a4713d5582159f98f305d56ed5f754ce64f57d4194d6b3a6f
-+PKG_HASH:=e5e1f4caee0a01de2aee26e3138807d6d3ca2b8e67287966d1fefd65e1fd8943
-
- PKG_MAINTAINER:=
- PKG_LICENSE:=LGPL-2.1-or-later
-
 --- a/feeds/packages/libs/libwebsockets/Makefile
 +++ b/feeds/packages/libs/libwebsockets/Makefile
 @@ -8,13 +8,13 @@
@@ -41,7 +23,7 @@
  include $(TOPDIR)/rules.mk
 
 -GO_VERSION_MAJOR_MINOR:=1.21
--GO_VERSION_PATCH:=3
+-GO_VERSION_PATCH:=7
 +GO_VERSION_MAJOR_MINOR:=1.22
 +GO_VERSION_PATCH:=0
 
@@ -51,7 +33,7 @@
 
  PKG_SOURCE:=go$(PKG_VERSION).src.tar.gz
  PKG_SOURCE_URL:=$(GO_SOURCE_URLS)
--PKG_HASH:=186f2b6f8c8b704e696821b09ab2041a5c1ee13dcbc3156a13adcf75931ee488
+-PKG_HASH:=00197ab20f33813832bff62fd93cca1c42a08cc689a32a6672ca49591959bff6
 +PKG_HASH:=4d196c3d41a0d6c1dfc64d04e3cc1f608b0c436bd87b7060ce3e23234e1f4d5c
 
  PKG_MAINTAINER:=Jeffery To <jeffery.to@gmail.com>
