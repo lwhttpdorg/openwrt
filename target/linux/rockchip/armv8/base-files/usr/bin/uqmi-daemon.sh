@@ -31,6 +31,25 @@ function ping_domain() {
     fi
 }
 
+function ddns_ondemand() {
+    # Check if service is started on boot
+    /etc/init.d/ddns enabled
+    if [ $? -eq 1 ]
+    then
+        echo "$(date '+%Y-%m-%d %H:%M:%S'): DDNS is not enabled autostart, nothing to do..." >> ${QMI_LOG}
+        return
+    fi
+    ps_ddns=$(ps|grep dynamic_dns_upd|grep -v grep)
+    if [ -z "${ps_ddns}" ]
+    then
+        echo "$(date '+%Y-%m-%d %H:%M:%S'): DDNS is enabled autostart but is not running, start it..." >> ${QMI_LOG}
+        /etc/init.d/ddns start
+    else
+        echo "$(date '+%Y-%m-%d %H:%M:%S'): Restart DDNS..." >> ${QMI_LOG}
+        /etc/init.d/ddns restart
+    fi
+}
+
 echo /dev/null > ${QMI_LOG}
 echo "$(date '+%Y-%m-%d %H:%M:%S'): QMI daemon is started..." > ${QMI_LOG}
 
@@ -53,7 +72,9 @@ while true; do
             NETWORK_STATUS=true
             FAILED_COUNT=0
             echo "$(date '+%Y-%m-%d %H:%M:%S'): Network is reachable" >> ${QMI_LOG}
+            ddns_ondemand
         fi
     fi
     sleep 1800
 done
+
