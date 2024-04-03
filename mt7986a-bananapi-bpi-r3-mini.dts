@@ -10,7 +10,6 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/leds/common.h>
-#include <dt-bindings/pinctrl/mt65xx.h>
 
 #include "mt7986a.dtsi"
 
@@ -32,6 +31,8 @@
 
 	chosen {
 		stdout-path = "serial0:115200n8";
+		rootdisk-emmc = <&emmc_rootdisk>;
+		rootdisk-spim-nand = <&nand_rootdisk>;
 	};
 
 	memory {
@@ -93,6 +94,15 @@
 		regulator-boot-on;
 		regulator-always-on;
 	};
+
+	usb_vbus: regulator-usb-vbus {
+		compatible = "regulator-fixed";
+		regulator-name = "usb_vbus";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpios = <&pio 20 GPIO_ACTIVE_LOW>;
+		regulator-boot-on;
+	};
 };
 
 &auxadc {
@@ -115,32 +125,22 @@
 	gmac0: mac@0 {
 		compatible = "mediatek,eth-mac";
 		reg = <0>;
+		phy-handle = <&phy14>;
 		phy-mode = "2500base-x";
-
-		fixed-link {
-			speed = <2500>;
-			full-duplex;
-			pause;
-		};
 	};
 
 	gmac1: mac@1 {
 		compatible = "mediatek,eth-mac";
 		reg = <1>;
+		phy-handle = <&phy15>;
 		phy-mode = "2500base-x";
-
-		fixed-link {
-			speed = <2500>;
-			full-duplex;
-			pause;
-		};
 	};
 
 	mdio: mdio-bus {
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		phy14: phy@14 {
+		phy14: phy@e {
 			/* EN8811H PHY ID */
 			compatible = "ethernet-phy-id03a2.a411";
 			/* PHY Address */
@@ -148,20 +148,37 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&en8811_pwr_a>;
 
-			airoha,rx-pol-reverse;
+			airoha,pnswap-rx;
 
 			interrupt-parent = <&pio>;
-			interrupts = <48 IRQ_TYPE_LEVEL_HIGH>;
-			reset-gpios = <&pio 49 1>;     /* GPIO49 */
+			interrupts = <48 IRQ_TYPE_EDGE_FALLING>;
+			reset-gpios = <&pio 49 GPIO_ACTIVE_LOW>;     /* GPIO49 */
 			reset-assert-us = <10000>;
 			reset-deassert-us = <20000>;
 
 			phy-mode = "2500base-x";
 			full-duplex;
 			pause;
+
+			leds {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				led@0 {
+					reg = <0>;
+					function = LED_FUNCTION_LAN;
+					color = <LED_COLOR_ID_YELLOW>;
+				};
+
+				led@1 {
+					reg = <1>;
+					function = LED_FUNCTION_LAN;
+					color = <LED_COLOR_ID_GREEN>;
+				};
+			};
 		};
 
-		phy15: phy@15 {
+		phy15: phy@f {
 			/* EN8811H PHY ID */
 			compatible = "ethernet-phy-id03a2.a411";
 			/* PHY Address */
@@ -169,17 +186,34 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&en8811_pwr_b>;
 
-			airoha,rx-pol-reverse;
+			airoha,pnswap-rx;
 
 			interrupt-parent = <&pio>;
-			interrupts = <46 IRQ_TYPE_LEVEL_HIGH>;
-			reset-gpios = <&pio 47 1>;     /* GPIO47 */
+			interrupts = <46 IRQ_TYPE_EDGE_FALLING>;
+			reset-gpios = <&pio 47 GPIO_ACTIVE_LOW>;     /* GPIO47 */
 			reset-assert-us = <10000>;
 			reset-deassert-us = <20000>;
 
 			phy-mode = "2500base-x";
 			full-duplex;
 			pause;
+
+			leds {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				led@0 {
+					reg = <0>;
+					function = LED_FUNCTION_WAN;
+					color = <LED_COLOR_ID_YELLOW>;
+				};
+
+				led@1 {
+					reg = <1>;
+					function = LED_FUNCTION_WAN;
+					color = <LED_COLOR_ID_GREEN>;
+				};
+			};
 		};
 	};
 };
@@ -226,6 +260,20 @@
 	no-sd;
 	no-sdio;
 	status = "okay";
+
+	card@0 {
+		compatible = "mmc-card";
+		reg = <0>;
+
+		block {
+			compatible = "block-device";
+			partitions {
+				emmc_rootdisk: block-partition-production {
+					partname = "production";
+				};
+			};
+		};
+	};
 };
 
 &pcie {
@@ -378,6 +426,11 @@
 	};
 
 	usb_ngff_pins: usb-ngff-pins {
+		ngff-gnss-off {
+			pins = "GPIO_6";
+			drive-strength = <8>;
+			mediatek,pull-up-adv = <1>;
+		};
 		ngff-pe-rst {
 			pins = "GPIO_7";
 			drive-strength = <8>;
@@ -395,6 +448,11 @@
 		};
 		ngff-rst {
 			pins = "GPIO_10";
+			drive-strength = <8>;
+			mediatek,pull-up-adv = <1>;
+		};
+		ngff-coex {
+			pins = "SPI1_CS";
 			drive-strength = <8>;
 			mediatek,pull-up-adv = <1>;
 		};
@@ -501,7 +559,8 @@
 &spi1 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&spic_pins>;
-	status = "okay";
+	/* conflicts with M.2 pin */
+	status = "disabled";
 };
 
 &ssusb {
@@ -509,7 +568,7 @@
 	pinctrl-0 = <&usb_pwwr_en>;
 	pinctrl-1 = <&usb_ngff_pins>;
 	vusb33-supply = <&reg_3p3v>;
-	vbus-supply = <&reg_5v>;
+	vbus-supply = <&usb_vbus>;
 	status = "okay";
 };
 
