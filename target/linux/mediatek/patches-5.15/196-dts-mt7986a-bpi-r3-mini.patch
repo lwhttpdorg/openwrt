@@ -1,31 +1,6 @@
---- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -585,6 +585,14 @@
- 			status = "disabled";
- 		};
- 
-+		hnat: hnat@15000000 {
-+			compatible = "mediatek,mtk-hnat_v4";
-+			reg = <0 0x15100000 0 0x80000>;
-+			resets = <&ethsys 0>;
-+			reset-names = "mtketh";
-+			status = "disabled";
-+		};
-+
- 		wifi: wifi@18000000 {
- 			compatible = "mediatek,mt7986-wmac";
- 			resets = <&watchdog MT7986_TOPRGU_CONSYS_SW_RST>;
-@@ -599,6 +607,7 @@
- 				     <GIC_SPI 214 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 216 IRQ_TYPE_LEVEL_HIGH>;
-+			chip_id = <0x7986>;
- 			memory-region = <&wmcpu_emi>;
- 		};
- 	};
 --- a/dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts
-@@ -0,0 +1,678 @@
+@@ -0,0 +1,679 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright (C) 2021 MediaTek Inc.
@@ -529,7 +504,8 @@
 +&spi1 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&spic_pins>;
-+	status = "okay";
++	/* conflicts with M.2 pin */
++	status = "disabled";
 +};
 +
 +&ssusb {
