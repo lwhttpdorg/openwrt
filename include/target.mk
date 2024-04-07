@@ -61,7 +61,6 @@ DEFAULT_PACKAGES.router:=\
 	odhcpd-ipv6only \
 	ppp \
 	ppp-mod-pppoe \
-	block-mount \
 	luci \
 	luci-app-opkg
 
