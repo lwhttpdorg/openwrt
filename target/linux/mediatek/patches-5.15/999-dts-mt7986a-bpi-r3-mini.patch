@@ -1,36 +1,6 @@
---- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -153,6 +153,7 @@
- 			compatible = "mediatek,mt7986-infracfg", "syscon";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
-+			#reset-cells = <1>;
- 		};
- 
- 		wed_pcie: wed-pcie@10003000 {
-@@ -374,6 +375,10 @@
- 			reg = <0 0x11230000 0 0x1000>,
- 			      <0 0x11c20000 0 0x1000>;
- 			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
-+			assigned-clocks = <&topckgen CLK_TOP_EMMC_416M_SEL>,
-+					  <&topckgen CLK_TOP_EMMC_250M_SEL>;
-+			assigned-clock-parents = <&apmixedsys CLK_APMIXED_MPLL>,
-+						 <&topckgen CLK_TOP_NET1PLL_D5_D2>;
- 			clocks = <&topckgen CLK_TOP_EMMC_416M_SEL>,
- 				 <&infracfg CLK_INFRA_MSDC_HCK_CK>,
- 				 <&infracfg CLK_INFRA_MSDC_CK>,
-@@ -434,7 +439,7 @@
- 			};
- 		};
- 
--		pcie_phy: t-phy@11c00000 {
-+		pcie_phy: t-phy {
- 			compatible = "mediatek,mt7986-tphy",
- 				     "mediatek,generic-tphy-v2";
- 			#address-cells = <2>;
 --- a/dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts
-@@ -0,0 +1,689 @@
+@@ -0,0 +1,696 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright (C) 2021 MediaTek Inc.
@@ -272,6 +242,13 @@
 +};
 +
 +&pio {
++	/* GPIO 11 NGFF_GNSS_OFF. output-high: enable, output-low: disable */
++	gnss_off {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>;
++		output-high;
++	};
++
 +	en8811_pwr_a: en8811-pwr-a {
 +		pins = "GPIO_11";
 +		drive-strength = <8>;

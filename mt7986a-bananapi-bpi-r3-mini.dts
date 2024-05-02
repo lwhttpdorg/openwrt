@@ -239,6 +239,13 @@
 };
 
 &pio {
+	/* GPIO 11 NGFF_GNSS_OFF. output-high: enable, output-low: disable */
+	gnss_off {
+		gpio-hog;
+		gpios = <11 GPIO_ACTIVE_HIGH>;
+		output-high;
+	};
+
 	en8811_pwr_a: en8811-pwr-a {
 		pins = "GPIO_11";
 		drive-strength = <8>;
