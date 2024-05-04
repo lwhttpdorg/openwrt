@@ -2429,9 +2429,9 @@ CONFIG_PACKAGE_kmod-libphy=y
 # CONFIG_PACKAGE_kmod-macvlan is not set
 CONFIG_PACKAGE_kmod-mdio-devres=y
 # CONFIG_PACKAGE_kmod-mdio-gpio is not set
-# CONFIG_PACKAGE_kmod-mhi-net is not set
-# CONFIG_PACKAGE_kmod-mhi-wwan-ctrl is not set
-# CONFIG_PACKAGE_kmod-mhi-wwan-mbim is not set
+CONFIG_PACKAGE_kmod-mhi-net=y
+CONFIG_PACKAGE_kmod-mhi-wwan-ctrl=y
+CONFIG_PACKAGE_kmod-mhi-wwan-mbim=y
 CONFIG_PACKAGE_kmod-mii=y
 # CONFIG_PACKAGE_kmod-mlx4-core is not set
 # CONFIG_PACKAGE_kmod-mlx5-core is not set
@@ -2597,8 +2597,8 @@ CONFIG_PACKAGE_kmod-gpio-button-hotplug=y
 # CONFIG_PACKAGE_kmod-keys-trusted is not set
 # CONFIG_PACKAGE_kmod-lkdtm is not set
 # CONFIG_PACKAGE_kmod-lp is not set
-# CONFIG_PACKAGE_kmod-mhi-bus is not set
-# CONFIG_PACKAGE_kmod-mhi-pci-generic is not set
+CONFIG_PACKAGE_kmod-mhi-bus=y
+CONFIG_PACKAGE_kmod-mhi-pci-generic=y
 # CONFIG_PACKAGE_kmod-mmc is not set
 # CONFIG_PACKAGE_kmod-mtd-rw is not set
 # CONFIG_PACKAGE_kmod-mtdoops is not set
@@ -2711,7 +2711,7 @@ CONFIG_PACKAGE_kmod-usb-net-qmi-wwan=y
 # CONFIG_PACKAGE_kmod-usb-ohci is not set
 # CONFIG_PACKAGE_kmod-usb-ohci-pci is not set
 # CONFIG_PACKAGE_kmod-usb-printer is not set
-# CONFIG_PACKAGE_kmod-usb-serial is not set
+CONFIG_PACKAGE_kmod-usb-serial=y
 # CONFIG_PACKAGE_kmod-usb-serial-ark3116 is not set
 # CONFIG_PACKAGE_kmod-usb-serial-belkin is not set
 # CONFIG_PACKAGE_kmod-usb-serial-ch341 is not set
@@ -2728,7 +2728,7 @@ CONFIG_PACKAGE_kmod-usb-net-qmi-wwan=y
 # CONFIG_PACKAGE_kmod-usb-serial-option is not set
 # CONFIG_PACKAGE_kmod-usb-serial-oti6858 is not set
 # CONFIG_PACKAGE_kmod-usb-serial-pl2303 is not set
-# CONFIG_PACKAGE_kmod-usb-serial-qualcomm is not set
+CONFIG_PACKAGE_kmod-usb-serial-qualcomm=y
 # CONFIG_PACKAGE_kmod-usb-serial-sierrawireless is not set
 # CONFIG_PACKAGE_kmod-usb-serial-simple is not set
 # CONFIG_PACKAGE_kmod-usb-serial-ti-usb is not set
@@ -4537,7 +4537,7 @@ CONFIG_PACKAGE_libudns=y
 # CONFIG_PACKAGE_libupnpp is not set
 # CONFIG_PACKAGE_liburcu is not set
 # CONFIG_PACKAGE_liburing is not set
-# CONFIG_PACKAGE_libusb-1.0 is not set
+CONFIG_PACKAGE_libusb-1.0=y
 # CONFIG_PACKAGE_libusb-compat is not set
 # CONFIG_PACKAGE_libustream-mbedtls is not set
 CONFIG_PACKAGE_libustream-openssl=y
@@ -6725,7 +6725,7 @@ CONFIG_PACKAGE_bash=y
 # CONFIG_PACKAGE_agetty is not set
 # CONFIG_PACKAGE_dvtm is not set
 # CONFIG_PACKAGE_kitty-terminfo is not set
-# CONFIG_PACKAGE_minicom is not set
+CONFIG_PACKAGE_minicom=y
 # CONFIG_PACKAGE_picocom is not set
 # CONFIG_PACKAGE_rtty-mbedtls is not set
 # CONFIG_PACKAGE_rtty-nossl is not set
@@ -7299,9 +7299,9 @@ CONFIG_PACKAGE_ucode-mod-lua=y
 # CONFIG_PACKAGE_uledd is not set
 # CONFIG_PACKAGE_unix2dos is not set
 # CONFIG_PACKAGE_unshare is not set
-# CONFIG_PACKAGE_usb-modeswitch is not set
+CONFIG_PACKAGE_usb-modeswitch=y
 # CONFIG_PACKAGE_usbids is not set
-# CONFIG_PACKAGE_usbutils is not set
+CONFIG_PACKAGE_usbutils=y
 # CONFIG_PACKAGE_uuidd is not set
 # CONFIG_PACKAGE_uuidgen is not set
 # CONFIG_PACKAGE_uvcdynctrl is not set

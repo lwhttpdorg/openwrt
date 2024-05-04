@@ -1,6 +1,21 @@
+--- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -624,6 +624,12 @@
+ 			chip_id = <0x7986>;
+ 			memory-region = <&wmcpu_emi>;
+ 		};
++
++		consys: consys@10000000 {
++			compatible = "mediatek,mt7986-consys";
++			reg = <0 0x10000000 0 0x8600000>;
++			memory-region = <&wmcpu_emi>;
++		};
+ 	};
+ 
+ 	thermal-zones {
 --- a/dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts
-@@ -0,0 +1,696 @@
+@@ -0,0 +1,732 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright (C) 2021 MediaTek Inc.
@@ -55,17 +70,22 @@
 +		compatible = "gpio-leds";
 +
 +		status_led: led-0 {
-+			label = "green:status";
++			function = LED_FUNCTION_STATUS;
++			color = <LED_COLOR_ID_GREEN>;
 +			gpios = <&pio 19 GPIO_ACTIVE_HIGH>;
 +		};
 +
 +		led-1 {
-+			label = "blue:wlan2g";
++			function = LED_FUNCTION_WLAN;
++			color = <LED_COLOR_ID_BLUE>;
++			function-enumerator = <1>;
 +			gpios = <&pio 1 GPIO_ACTIVE_HIGH>;
 +		};
 +
 +		led-2 {
-+			label = "blue:wlan5g";
++			function = LED_FUNCTION_WLAN;
++			color = <LED_COLOR_ID_BLUE>;
++			function-enumerator = <2>;
 +			gpios = <&pio 2 GPIO_ACTIVE_HIGH>;
 +		};
 +	};
@@ -96,6 +116,15 @@
 +		regulator-boot-on;
 +		regulator-always-on;
 +	};
++
++	usb_vbus: regulator-usb-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "usb_vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpios = <&pio 20 GPIO_ACTIVE_LOW>;
++		regulator-boot-on;
++	};
 +};
 +
 +&auxadc {
@@ -118,6 +147,7 @@
 +	gmac0: mac@0 {
 +		compatible = "mediatek,eth-mac";
 +		reg = <0>;
++		phy-handle = <&phy14>;
 +		phy-mode = "2500base-x";
 +
 +		fixed-link {
@@ -130,6 +160,7 @@
 +	gmac1: mac@1 {
 +		compatible = "mediatek,eth-mac";
 +		reg = <1>;
++		phy-handle = <&phy15>;
 +		phy-mode = "2500base-x";
 +
 +		fixed-link {
@@ -162,9 +193,26 @@
 +			phy-mode = "2500base-x";
 +			full-duplex;
 +			pause;
++
++			leds {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				led@0 {
++					reg = <0>;
++					function = LED_FUNCTION_LAN;
++					color = <LED_COLOR_ID_YELLOW>;
++				};
++
++				led@1 {
++					reg = <1>;
++					function = LED_FUNCTION_LAN;
++					color = <LED_COLOR_ID_GREEN>;
++				};
++			};
 +		};
 +
-+		phy15: phy@15 {
++		phy15: phy@f {
 +			/* EN8811H PHY ID */
 +			compatible = "ethernet-phy-id03a2.a411";
 +			/* PHY Address */
@@ -183,6 +231,23 @@
 +			phy-mode = "2500base-x";
 +			full-duplex;
 +			pause;
++
++			leds {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				led@0 {
++					reg = <0>;
++					function = LED_FUNCTION_WAN;
++					color = <LED_COLOR_ID_YELLOW>;
++				};
++
++				led@1 {
++					reg = <1>;
++					function = LED_FUNCTION_WAN;
++					color = <LED_COLOR_ID_GREEN>;
++				};
++			};
 +		};
 +	};
 +};
@@ -242,13 +307,6 @@
 +};
 +
 +&pio {
-+	/* GPIO 11 NGFF_GNSS_OFF. output-high: enable, output-low: disable */
-+	gnss_off {
-+		gpio-hog;
-+		gpios = <11 GPIO_ACTIVE_HIGH>;
-+		output-high;
-+	};
-+
 +	en8811_pwr_a: en8811-pwr-a {
 +		pins = "GPIO_11";
 +		drive-strength = <8>;
@@ -420,12 +478,6 @@
 +		};
 +	};
 +
-+	usb_pwwr_en: usb-pwwr-en {
-+		pins = "GPIO_15";
-+		drive-strength = <8>;
-+		mediatek,pull-down-adv = <1>;
-+	};
-+
 +	wf_2g_5g_pins: wf-2g-5g-pins {
 +		mux {
 +			function = "wifi";
@@ -527,10 +579,9 @@
 +
 +&ssusb {
 +	pinctrl-names = "default";
-+	pinctrl-0 = <&usb_pwwr_en>;
-+	pinctrl-1 = <&usb_ngff_pins>;
++	pinctrl-0 = <&usb_ngff_pins>;
 +	vusb33-supply = <&reg_3p3v>;
-+	vbus-supply = <&reg_5v>;
++	vbus-supply = <&usb_vbus>;
 +	status = "okay";
 +};
 +
@@ -548,14 +599,14 @@
 +	status = "okay";
 +};
 +
++&usb_phy {
++	status = "okay";
++};
++
 +&uart2 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart2_pins>;
 +	status = "disabled";
-+};
-+
-+&usb_phy {
-+	status = "okay";
 +};
 +
 +&watchdog {
