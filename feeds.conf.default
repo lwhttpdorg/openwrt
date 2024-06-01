@@ -2,5 +2,5 @@ src-git-full packages https://git.openwrt.org/feed/packages.git^e34369a41b522a49
 src-git-full luci https://git.openwrt.org/project/luci.git^74dd23bdb1c2ba00c68e3abf4d00233bb4f939cd
 src-git-full routing https://git.openwrt.org/feed/routing.git^777c115b0a6336d6582c5992d25b631b6d6d21fd
 src-git-full telephony https://git.openwrt.org/feed/telephony.git^33f2ae757b96bf32b0202b211973a246ca2c919b
-src-git kenzo https://github.com/kenzok8/openwrt-packages^c809de35edc69dc3c95ac42a039e1aabc8637ad6
-src-git small https://github.com/kenzok8/small^5b8f9532f3c67acc04ed70133bb70e8ae061c160
+src-git kenzo https://github.com/kenzok8/openwrt-packages
+src-git small https://github.com/kenzok8/small
