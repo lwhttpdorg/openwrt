@@ -1605,7 +1605,7 @@ CONFIG_PACKAGE_libstdcpp=y
 CONFIG_PACKAGE_logd=y
 CONFIG_PACKAGE_mtd=y
 CONFIG_PACKAGE_netifd=y
-# CONFIG_PACKAGE_nft-qos is not set
+CONFIG_PACKAGE_nft-qos=y
 CONFIG_PACKAGE_openwrt-keyring=y
 CONFIG_PACKAGE_opkg=y
 CONFIG_PACKAGE_procd=y
@@ -1983,7 +1983,7 @@ CONFIG_PACKAGE_wireless-regdb=y
 # CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansCondensed-Bold is not set
 # CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansCondensed-BoldOblique is not set
 # CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansCondensed-Oblique is not set
-CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansMono=y
+# CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansMono is not set
 # CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansMono-Bold is not set
 # CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansMono-BoldOblique is not set
 # CONFIG_PACKAGE_dejavu-fonts-ttf-DejaVuSansMono-Oblique is not set
@@ -2044,26 +2044,25 @@ CONFIG_PACKAGE_kmod-scsi-core=y
 #
 CONFIG_PACKAGE_kmod-crypto-acompress=y
 CONFIG_PACKAGE_kmod-crypto-aead=y
-# CONFIG_PACKAGE_kmod-crypto-arc4 is not set
+CONFIG_PACKAGE_kmod-crypto-arc4=y
 CONFIG_PACKAGE_kmod-crypto-authenc=y
 # CONFIG_PACKAGE_kmod-crypto-cbc is not set
-# CONFIG_PACKAGE_kmod-crypto-ccm is not set
-# CONFIG_PACKAGE_kmod-crypto-chacha20poly1305 is not set
-# CONFIG_PACKAGE_kmod-crypto-cmac is not set
-CONFIG_PACKAGE_kmod-crypto-crc32=m
+CONFIG_PACKAGE_kmod-crypto-ccm=y
+CONFIG_PACKAGE_kmod-crypto-chacha20poly1305=y
+CONFIG_PACKAGE_kmod-crypto-cmac=y
 CONFIG_PACKAGE_kmod-crypto-crc32c=y
-# CONFIG_PACKAGE_kmod-crypto-ctr is not set
+CONFIG_PACKAGE_kmod-crypto-ctr=y
 # CONFIG_PACKAGE_kmod-crypto-cts is not set
 # CONFIG_PACKAGE_kmod-crypto-deflate is not set
-# CONFIG_PACKAGE_kmod-crypto-des is not set
-# CONFIG_PACKAGE_kmod-crypto-ecb is not set
+CONFIG_PACKAGE_kmod-crypto-des=y
+CONFIG_PACKAGE_kmod-crypto-ecb=y
 # CONFIG_PACKAGE_kmod-crypto-ecdh is not set
 # CONFIG_PACKAGE_kmod-crypto-echainiv is not set
 # CONFIG_PACKAGE_kmod-crypto-essiv is not set
 # CONFIG_PACKAGE_kmod-crypto-fcrypt is not set
-# CONFIG_PACKAGE_kmod-crypto-gcm is not set
-# CONFIG_PACKAGE_kmod-crypto-gf128 is not set
-# CONFIG_PACKAGE_kmod-crypto-ghash is not set
+CONFIG_PACKAGE_kmod-crypto-gcm=y
+CONFIG_PACKAGE_kmod-crypto-gf128=y
+CONFIG_PACKAGE_kmod-crypto-ghash=y
 CONFIG_PACKAGE_kmod-crypto-hash=y
 CONFIG_PACKAGE_kmod-crypto-hmac=y
 # CONFIG_PACKAGE_kmod-crypto-hw-ccp is not set
@@ -2078,11 +2077,11 @@ CONFIG_PACKAGE_kmod-crypto-md5=y
 CONFIG_PACKAGE_kmod-crypto-null=y
 # CONFIG_PACKAGE_kmod-crypto-pcbc is not set
 # CONFIG_PACKAGE_kmod-crypto-rmd160 is not set
-# CONFIG_PACKAGE_kmod-crypto-rng is not set
-# CONFIG_PACKAGE_kmod-crypto-seqiv is not set
+CONFIG_PACKAGE_kmod-crypto-rng=y
+CONFIG_PACKAGE_kmod-crypto-seqiv=y
 CONFIG_PACKAGE_kmod-crypto-sha1=y
 CONFIG_PACKAGE_kmod-crypto-sha256=y
-# CONFIG_PACKAGE_kmod-crypto-sha512 is not set
+CONFIG_PACKAGE_kmod-crypto-sha512=y
 # CONFIG_PACKAGE_kmod-crypto-test is not set
 CONFIG_PACKAGE_kmod-crypto-user=y
 # CONFIG_PACKAGE_kmod-crypto-xcbc is not set
@@ -2104,7 +2103,7 @@ CONFIG_PACKAGE_kmod-cryptodev=y
 CONFIG_PACKAGE_kmod-fs-exfat=y
 # CONFIG_PACKAGE_kmod-fs-exportfs is not set
 CONFIG_PACKAGE_kmod-fs-ext4=y
-CONFIG_PACKAGE_kmod-fs-f2fs=m
+# CONFIG_PACKAGE_kmod-fs-f2fs is not set
 # CONFIG_PACKAGE_kmod-fs-fscache is not set
 # CONFIG_PACKAGE_kmod-fs-hfs is not set
 # CONFIG_PACKAGE_kmod-fs-hfsplus is not set
@@ -2479,9 +2478,9 @@ CONFIG_PACKAGE_kmod-libphy=y
 # CONFIG_PACKAGE_kmod-macvlan is not set
 CONFIG_PACKAGE_kmod-mdio-devres=y
 # CONFIG_PACKAGE_kmod-mdio-gpio is not set
-# CONFIG_PACKAGE_kmod-mhi-net is not set
-# CONFIG_PACKAGE_kmod-mhi-wwan-ctrl is not set
-# CONFIG_PACKAGE_kmod-mhi-wwan-mbim is not set
+CONFIG_PACKAGE_kmod-mhi-net=y
+CONFIG_PACKAGE_kmod-mhi-wwan-ctrl=y
+CONFIG_PACKAGE_kmod-mhi-wwan-mbim=y
 CONFIG_PACKAGE_kmod-mii=y
 # CONFIG_PACKAGE_kmod-mlx4-core is not set
 # CONFIG_PACKAGE_kmod-mlx5-core is not set
@@ -2529,7 +2528,7 @@ CONFIG_PACKAGE_kmod-r8169=y
 # CONFIG_PACKAGE_kmod-via-rhine is not set
 # CONFIG_PACKAGE_kmod-via-velocity is not set
 # CONFIG_PACKAGE_kmod-vmxnet3 is not set
-# CONFIG_PACKAGE_kmod-wwan is not set
+CONFIG_PACKAGE_kmod-wwan=y
 # end of Network Devices
 
 #
@@ -2660,9 +2659,9 @@ CONFIG_PACKAGE_kmod-gpio-button-hotplug=y
 # CONFIG_PACKAGE_kmod-lkdtm is not set
 # CONFIG_PACKAGE_kmod-lp is not set
 # CONFIG_PACKAGE_kmod-meraki-mx100 is not set
-# CONFIG_PACKAGE_kmod-mhi-bus is not set
-# CONFIG_PACKAGE_kmod-mhi-pci-generic is not set
-# CONFIG_PACKAGE_kmod-mmc is not set
+CONFIG_PACKAGE_kmod-mhi-bus=y
+CONFIG_PACKAGE_kmod-mhi-pci-generic=y
+CONFIG_PACKAGE_kmod-mmc=y
 # CONFIG_PACKAGE_kmod-mtdoops is not set
 # CONFIG_PACKAGE_kmod-mtdram is not set
 # CONFIG_PACKAGE_kmod-mtdtests is not set
@@ -2676,7 +2675,7 @@ CONFIG_PACKAGE_kmod-pps=y
 # CONFIG_PACKAGE_kmod-pps-ldisc is not set
 CONFIG_PACKAGE_kmod-ptp=y
 # CONFIG_PACKAGE_kmod-ramoops is not set
-CONFIG_PACKAGE_kmod-random-core=m
+# CONFIG_PACKAGE_kmod-random-core is not set
 # CONFIG_PACKAGE_kmod-reed-solomon is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1307 is not set
 # CONFIG_PACKAGE_kmod-rtc-ds1374 is not set
@@ -2997,7 +2996,7 @@ CONFIG_GOLANG_BUILD_CACHE_DIR=""
 # CONFIG_PACKAGE_dkjson is not set
 # CONFIG_PACKAGE_json4lua is not set
 # CONFIG_PACKAGE_ldbus is not set
-CONFIG_PACKAGE_libiwinfo-lua=y
+# CONFIG_PACKAGE_libiwinfo-lua is not set
 # CONFIG_PACKAGE_linotify is not set
 # CONFIG_PACKAGE_lpeg is not set
 # CONFIG_PACKAGE_lsqlite3 is not set
@@ -4110,7 +4109,7 @@ CONFIG_boost-variant-release=y
 # CONFIG_PACKAGE_boost-context is not set
 # CONFIG_PACKAGE_boost-contract is not set
 # CONFIG_PACKAGE_boost-coroutine is not set
-CONFIG_PACKAGE_boost-date_time=y
+# CONFIG_PACKAGE_boost-date_time is not set
 # CONFIG_PACKAGE_boost-fiber is not set
 # CONFIG_PACKAGE_boost-filesystem is not set
 # CONFIG_PACKAGE_boost-graph is not set
@@ -4266,7 +4265,7 @@ CONFIG_PACKAGE_libelf=y
 # CONFIG_PACKAGE_libestr is not set
 CONFIG_PACKAGE_libev=y
 CONFIG_PACKAGE_libevdev=y
-CONFIG_PACKAGE_libevent2=y
+# CONFIG_PACKAGE_libevent2 is not set
 # CONFIG_PACKAGE_libevent2-core is not set
 # CONFIG_PACKAGE_libevent2-extra is not set
 # CONFIG_PACKAGE_libevent2-openssl is not set
@@ -4442,7 +4441,7 @@ CONFIG_PACKAGE_libpcre=y
 CONFIG_PCRE_JIT_ENABLED=y
 # CONFIG_PACKAGE_libpcre16 is not set
 CONFIG_PACKAGE_libpcre2=y
-CONFIG_PCRE2_JIT_ENABLED=y
+# CONFIG_PCRE2_JIT_ENABLED is not set
 # CONFIG_PACKAGE_libpcre2-16 is not set
 # CONFIG_PACKAGE_libpcre2-32 is not set
 # CONFIG_PACKAGE_libpcre32 is not set
@@ -4497,14 +4496,7 @@ CONFIG_PACKAGE_libsmartcols=y
 # CONFIG_PACKAGE_libsndfile is not set
 # CONFIG_PACKAGE_libsoc is not set
 # CONFIG_PACKAGE_libsocks is not set
-CONFIG_PACKAGE_libsodium=y
-
-#
-# Configuration
-#
-CONFIG_LIBSODIUM_MINIMAL=y
-# end of Configuration
-
+# CONFIG_PACKAGE_libsodium is not set
 # CONFIG_PACKAGE_libsoup is not set
 # CONFIG_PACKAGE_libsoup3 is not set
 # CONFIG_PACKAGE_libsoxr is not set
@@ -4540,7 +4532,7 @@ CONFIG_PACKAGE_libuclient=y
 CONFIG_PACKAGE_libucode=y
 # CONFIG_PACKAGE_libucontext is not set
 CONFIG_PACKAGE_libudev-zero=y
-CONFIG_PACKAGE_libudns=y
+# CONFIG_PACKAGE_libudns is not set
 # CONFIG_PACKAGE_libuecc is not set
 # CONFIG_PACKAGE_libugpio is not set
 # CONFIG_PACKAGE_libunistring is not set
@@ -4751,7 +4743,7 @@ CONFIG_PACKAGE_luci-app-advanced-reboot=y
 # CONFIG_PACKAGE_luci-app-cshark is not set
 # CONFIG_PACKAGE_luci-app-dawn is not set
 # CONFIG_PACKAGE_luci-app-dcwapd is not set
-CONFIG_PACKAGE_luci-app-ddns=m
+CONFIG_PACKAGE_luci-app-ddns=y
 CONFIG_PACKAGE_luci-app-ddns-go=y
 # CONFIG_PACKAGE_luci-app-ddnsto is not set
 # CONFIG_PACKAGE_luci-app-design-config is not set
@@ -4793,7 +4785,7 @@ CONFIG_PACKAGE_luci-app-frpc=y
 # CONFIG_PACKAGE_luci-app-mwan3 is not set
 # CONFIG_PACKAGE_luci-app-natmap is not set
 # CONFIG_PACKAGE_luci-app-nextdns is not set
-# CONFIG_PACKAGE_luci-app-nft-qos is not set
+CONFIG_PACKAGE_luci-app-nft-qos=y
 # CONFIG_PACKAGE_luci-app-nlbwmon is not set
 # CONFIG_PACKAGE_luci-app-nut is not set
 # CONFIG_PACKAGE_luci-app-ocserv is not set
@@ -4827,14 +4819,14 @@ CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server is not set
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client is not set
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server is not set
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs is not set
 CONFIG_PACKAGE_luci-app-passwall_INCLUDE_SingBox=y
 CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_tuic_client is not set
 CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geodata=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin is not set
 CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
-CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
+# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin is not set
 # end of Configuration
 
 # CONFIG_PACKAGE_luci-app-passwall2 is not set
@@ -5085,7 +5077,7 @@ CONFIG_PACKAGE_luci-i18n-ddns-go-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-ddns-tr is not set
 # CONFIG_PACKAGE_luci-i18n-ddns-uk is not set
 # CONFIG_PACKAGE_luci-i18n-ddns-vi is not set
-CONFIG_PACKAGE_luci-i18n-ddns-zh-cn=m
+CONFIG_PACKAGE_luci-i18n-ddns-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-ddns-zh-tw is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-ar is not set
 # CONFIG_PACKAGE_luci-i18n-firewall-bg is not set
@@ -5154,6 +5146,39 @@ CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-frpc-vi is not set
 CONFIG_PACKAGE_luci-i18n-frpc-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-frpc-zh-tw is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-ar is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-bg is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-bn is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-ca is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-cs is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-da is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-de is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-el is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-es is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-fi is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-fr is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-he is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-hi is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-hu is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-it is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-ja is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-ko is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-lt is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-mr is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-ms is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-no is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-pl is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-pt is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-pt-br is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-ro is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-ru is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-sk is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-sv is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-tr is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-uk is not set
+# CONFIG_PACKAGE_luci-i18n-nft-qos-vi is not set
+CONFIG_PACKAGE_luci-i18n-nft-qos-zh-cn=y
+# CONFIG_PACKAGE_luci-i18n-nft-qos-zh-tw is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-ar is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-bg is not set
 # CONFIG_PACKAGE_luci-i18n-opkg-bn is not set
@@ -6589,7 +6614,7 @@ CONFIG_PACKAGE_zstd=y
 # CONFIG_PACKAGE_blkdiscard is not set
 CONFIG_PACKAGE_blkid=y
 # CONFIG_PACKAGE_blockdev is not set
-# CONFIG_PACKAGE_cfdisk is not set
+CONFIG_PACKAGE_cfdisk=y
 # CONFIG_PACKAGE_cgdisk is not set
 # CONFIG_PACKAGE_eject is not set
 # CONFIG_PACKAGE_fatresize is not set
@@ -6607,7 +6632,7 @@ CONFIG_PACKAGE_lsblk=y
 # CONFIG_PACKAGE_mtools is not set
 # CONFIG_PACKAGE_nvme-cli is not set
 # CONFIG_PACKAGE_parted is not set
-CONFIG_PACKAGE_partx-utils=y
+# CONFIG_PACKAGE_partx-utils is not set
 # CONFIG_PACKAGE_sfdisk is not set
 # CONFIG_PACKAGE_sgdisk is not set
 # CONFIG_PACKAGE_uvol is not set
@@ -6673,7 +6698,7 @@ CONFIG_PACKAGE_e2fsprogs=y
 # CONFIG_PACKAGE_exfat-mkfs is not set
 # CONFIG_PACKAGE_f2fs-tools is not set
 # CONFIG_PACKAGE_f2fs-tools-selinux is not set
-# CONFIG_PACKAGE_f2fsck is not set
+CONFIG_PACKAGE_f2fsck=y
 # CONFIG_PACKAGE_f2fsck-selinux is not set
 # CONFIG_PACKAGE_filefrag is not set
 # CONFIG_PACKAGE_fstrim is not set
