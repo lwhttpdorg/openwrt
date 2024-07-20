@@ -320,6 +320,18 @@ define U-Boot/mt7981_qihoo_360t7
   DEPENDS:=+trusted-firmware-a-mt7981-spim-nand-ddr3
 endef
 
+define U-Boot/mt7981_xiaomi_mi-router-ax3000t
+  NAME:=Xiaomi Router AX3000T
+  BUILD_SUBTARGET:=filogic
+  BUILD_DEVICES:=xiaomi_mi-router-ax3000t-ubootmod
+  UBOOT_CONFIG:=mt7981_xiaomi_mi-router-ax3000t
+  UBOOT_IMAGE:=u-boot.fip
+  BL2_BOOTDEV:=spim-nand
+  BL2_SOC:=mt7981
+  BL2_DDRTYPE:=ddr3
+  DEPENDS:=+trusted-firmware-a-mt7981-spim-nand-ddr3
+endef
+
 define U-Boot/mt7981_xiaomi_mi-router-wr30u
   NAME:=Xiaomi Router WR30U
   BUILD_SUBTARGET:=filogic
@@ -427,6 +439,30 @@ define U-Boot/mt7986_glinet_gl-mt6000
   BL2_SOC:=mt7986
   BL2_DDRTYPE:=ddr4
   DEPENDS:=+trusted-firmware-a-mt7986-emmc-ddr4
+endef
+
+define U-Boot/mt7986_jdcloud_re-cp-03
+  NAME:=JDCloud RE-CP-03
+  BUILD_SUBTARGET:=filogic
+  BUILD_DEVICES:=jdcloud_re-cp-03
+  UBOOT_CONFIG:=mt7986a_jdcloud_re-cp-03
+  UBOOT_IMAGE:=u-boot.fip
+  BL2_BOOTDEV:=emmc
+  BL2_SOC:=mt7986
+  BL2_DDRTYPE:=ddr4
+  DEPENDS:=+trusted-firmware-a-mt7986-emmc-ddr4
+endef
+
+define U-Boot/mt7986_netcore_n60
+  NAME:=Netcore N60
+  BUILD_SUBTARGET:=filogic
+  BUILD_DEVICES:=netcore_n60
+  UBOOT_CONFIG:=mt7986_netcore_n60
+  UBOOT_IMAGE:=u-boot.fip
+  BL2_BOOTDEV:=spim-nand
+  BL2_SOC:=mt7986
+  BL2_DDRTYPE:=ddr3
+  DEPENDS:=+trusted-firmware-a-mt7986-spim-nand-ddr3
 endef
 
 define U-Boot/mt7986_tplink_tl-xdr4288
