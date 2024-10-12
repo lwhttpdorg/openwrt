@@ -75,6 +75,6 @@ while true; do
             ddns_ondemand
         fi
     fi
-    sleep 1800
+    sleep 300
 done
 
