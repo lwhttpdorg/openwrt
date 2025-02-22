@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+START=99
+STOP=10
+
+
+restart() {
+    uqmi_pid=$(ps|grep uqmi-daemon.sh|grep -v grep|awk '{print $1}')
+    kill ${uqmi_pid}
+    sleep 1 # give time to shutdown
+    /usr/bin/uqmi-daemon.sh &
+}
+
+start() {
+    uqmi_pid=$(ps|grep uqmi-daemon.sh|grep -v grep|awk '{print $1}')
+    if [ -z "${uqmi_pid}" ]
+    then
+        echo "UQMI daemon is started"
+        /usr/bin/uqmi-daemon.sh &
+    else
+        echo "UQMI daemon is already running"
+    fi
+}
+
+stop() {
+    uqmi_pid=$(ps|grep uqmi-daemon.sh|grep -v grep|awk '{print $1}')
+    if [ -n "${uqmi_pid}" ]
+    then
+        kill ${uqmi_pid}
+    fi
+    return 0
+}

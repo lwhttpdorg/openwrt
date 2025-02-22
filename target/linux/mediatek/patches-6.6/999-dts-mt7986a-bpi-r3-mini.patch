@@ -1,0 +1,17 @@
+--- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -568,6 +568,14 @@
+ 			status = "disabled";
+ 		};
+ 
++		hnat: hnat@15000000 {
++			compatible = "mediatek,mtk-hnat_v4";
++			reg = <0 0x15100000 0 0x80000>;
++			resets = <&ethsys 0>;
++			reset-names = "mtketh";
++			status = "disabled";
++		};
++
+ 		wo_ccif0: syscon@151a5000 {
+ 			compatible = "mediatek,mt7986-wo-ccif", "syscon";
+ 			reg = <0 0x151a5000 0 0x1000>;
