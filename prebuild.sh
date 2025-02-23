@@ -4,6 +4,12 @@
 ./scripts/feeds update -a
 ./scripts/feeds update -a
 
+rm -rf feeds/luci/applications/luci-app-mosdns
+rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
+rm -rf feeds/packages/utils/v2dat
+#rm -rf feeds/packages/lang/golang
+#git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+
 #GOLANG_MAKEFILE=./feeds/packages/lang/golang/golang/Makefile
 #sed -i -e 's/GO_VERSION_MAJOR_MINOR:=[0-9]\+\.[0-9]\+/GO_VERSION_MAJOR_MINOR:=1.20/' $GOLANG_MAKEFILE
 #sed -i -e 's/GO_VERSION_PATCH:=[0-9]\+/GO_VERSION_PATCH:=10/' $GOLANG_MAKEFILE
