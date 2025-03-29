@@ -50,8 +50,8 @@ function ddns_ondemand() {
     fi
 }
 
-echo /dev/null > ${QMI_LOG}
-echo "$(date '+%Y-%m-%d %H:%M:%S'): QMI daemon is started..." > ${QMI_LOG}
+#echo /dev/null > ${QMI_LOG}
+echo "$(date '+%Y-%m-%d %H:%M:%S'): QMI daemon is running..." >> ${QMI_LOG}
 
 FAILED_COUNT=0
 NETWORK_STATUS=false
