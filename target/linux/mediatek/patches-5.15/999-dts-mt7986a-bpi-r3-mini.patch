@@ -15,7 +15,7 @@
  	thermal-zones {
 --- a/dev/null
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts
-@@ -0,0 +1,732 @@
+@@ -0,0 +1,728 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Copyright (C) 2021 MediaTek Inc.
@@ -128,10 +128,6 @@
 +};
 +
 +&auxadc {
-+	status = "okay";
-+};
-+
-+&watchdog {
 +	status = "okay";
 +};
 +
