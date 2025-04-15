@@ -1,6 +1,6 @@
 --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -568,6 +568,14 @@
+@@ -562,6 +562,14 @@
  			status = "disabled";
  		};
  

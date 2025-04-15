@@ -382,13 +382,14 @@ TARGET_DEVICES += bananapi_bpi-r3
 
 define Device/bananapi_bpi-r3-mini
   DEVICE_VENDOR := Bananapi
-  DEVICE_MODEL := BPi-R3 Mini
+  DEVICE_MODEL := BPi-R3 mini
   DEVICE_DTS := mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_CONFIG := config-mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_DIR := ../dts
   DEVICE_DTS_LOADADDR := 0x43f00000
-  DEVICE_PACKAGES := kmod-hwmon-pwmfan kmod-mt7915e kmod-mt7986-firmware kmod-phy-airoha-en8811h \
-		     kmod-usb3 e2fsprogs f2fsck mkf2fs mt7986-wo-firmware
+  DEVICE_PACKAGES := kmod-eeprom-at24 kmod-hwmon-pwmfan kmod-mt7915e kmod-mt7986-firmware \
+		     kmod-phy-airoha-en8811h kmod-usb3 e2fsprogs f2fsck mkf2fs mt7986-wo-firmware \
+		     automount
   KERNEL_LOADADDR := 0x44000000
   KERNEL := kernel-bin | gzip
   KERNEL_INITRAMFS := kernel-bin | lzma | \
@@ -406,8 +407,12 @@ endif
     fit gzip $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb external-static-with-rootfs | \
     pad-rootfs | append-metadata
   ARTIFACTS := \
-       emmc-gpt.bin emmc-preloader.bin emmc-bl31-uboot.fip \
-       snand-factory.bin snand-preloader.bin snand-bl31-uboot.fip
+       emmc-gpt.bin \
+       emmc-preloader.bin \
+       emmc-bl31-uboot.fip \
+       snand-factory.bin \
+       snand-preloader.bin \
+       snand-bl31-uboot.fip
   ARTIFACT/emmc-gpt.bin := mt798x-gpt emmc
   ARTIFACT/emmc-preloader.bin := mt7986-bl2 emmc-ddr4
   ARTIFACT/emmc-bl31-uboot.fip := mt7986-bl31-uboot bananapi_bpi-r3-mini-emmc
@@ -422,6 +427,8 @@ endif
 ifneq ($(CONFIG_PACKAGE_airoha-en8811h-firmware),)
   UBINIZE_PARTS += en8811h-fw=:$(STAGING_DIR_IMAGE)/EthMD32.bin
 endif
+  DEVICE_COMPAT_VERSION := 1.2
+  DEVICE_COMPAT_MESSAGE := Flash layout changes require bootloader update
 endef
 TARGET_DEVICES += bananapi_bpi-r3-mini
 

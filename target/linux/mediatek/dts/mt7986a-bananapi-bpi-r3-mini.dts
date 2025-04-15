@@ -14,7 +14,7 @@
 #include "mt7986a.dtsi"
 
 / {
-	model = "BananaPi BPi-R3 Mini";
+	model = "BananaPi BPi-R3 mini";
 	chassis-type = "embedded";
 	compatible = "bananapi,bpi-r3-mini", "mediatek,mt7986a";
 

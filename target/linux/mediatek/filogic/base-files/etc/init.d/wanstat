@@ -1,0 +1,32 @@
+#!/bin/sh /etc/rc.common
+START=99
+STOP=10
+
+
+restart() {
+    wanstat_pid=$(ps|grep wanstat.sh|grep -v grep|awk '{print $1}')
+    kill ${wanstat_pid}
+    sleep 1 # give time to shutdown
+    /usr/bin/wanstat.sh &
+}
+
+start() {
+    wanstat_pid=$(ps|grep wanstat.sh|grep -v grep|awk '{print $1}')
+    if [ -z "${wanstat_pid}" ]
+    then
+        echo "WAN interface monitor is started"
+        /usr/bin/wanstat.sh &
+    else
+        echo "WAN interface monitor is already running"
+    fi
+}
+
+stop() {
+    wanstat_pid=$(ps|grep wanstat.sh|grep -v grep|awk '{print $1}')
+    if [ -n "${wanstat_pid}" ]
+    then
+        kill ${wanstat_pid}
+    fi
+    return 0
+}
+
