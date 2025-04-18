@@ -11,6 +11,7 @@ mediatek_setup_interfaces()
 	abt,asr3000|\
 	cmcc,rax3000m|\
 	h3c,magic-nx30-pro|\
+	netis,nx31|\
 	nokia,ea0326gmp|\
 	zbtlink,zbt-z8103ax)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" eth1
@@ -30,9 +31,12 @@ mediatek_setup_interfaces()
 		;;
 	asus,rt-ax59u|\
 	cetron,ct3003|\
+	cmcc,a10-stock|\
+	cmcc,a10-ubootmod|\
 	confiabits,mt7981|\
 	cudy,wr3000-v1|\
 	jcg,q30-pro|\
+	keenetic,kn-3811|\
 	qihoo,360t7|\
 	routerich,ax3000|\
 	routerich,ax3000-ubootmod)
@@ -60,7 +64,8 @@ mediatek_setup_interfaces()
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4 sfp2" "eth1 wan"
 		;;
 	bananapi,bpi-r3-mini|\
-	edgecore,eap111)
+	edgecore,eap111|\
+	huasifei,wh3000)
 		ucidef_set_interfaces_lan_wan eth0 eth1
 		;;
 	bananapi,bpi-r4|\
@@ -92,6 +97,13 @@ mediatek_setup_interfaces()
 	dlink,aquila-pro-ai-m60-a1)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" internet
 		;;
+	keenetic,kn-3911|\
+	smartrg,sdg-8622|\
+	smartrg,sdg-8632|\
+	smartrg,sdg-8733a|\
+	yuncore,ax835)
+		ucidef_set_interfaces_lan_wan lan wan
+		;;
 	mediatek,mt7986a-rfb)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4 lan6" "eth1 wan"
 		;;
@@ -104,12 +116,6 @@ mediatek_setup_interfaces()
 	mercusys,mr90x-v1|\
 	mercusys,mr90x-v1-ubi)
 		ucidef_set_interfaces_lan_wan "lan0 lan1 lan2" eth1
-		;;
-	smartrg,sdg-8622|\
-	smartrg,sdg-8632|\
-	smartrg,sdg-8733a|\
-	yuncore,ax835)
-		ucidef_set_interfaces_lan_wan lan wan
 		;;
 	tplink,tl-xdr6086|\
 	wavlink,wl-wn586x3)
