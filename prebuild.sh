@@ -11,9 +11,9 @@
 
 #git apply ./feeds.diff
 
-./scripts/feeds install -a
-./scripts/feeds install -a
-
 rm -rf feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 23.x feeds/packages/lang/golang
+git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
+
+./scripts/feeds install -a
+./scripts/feeds install -a
 
