@@ -47,6 +47,7 @@ while true; do
             /sbin/reboot
         fi
         echo "$(date '+%Y-%m-%d %H:%M:%S'): Network is unreachable, try to reset" >> ${IF_WAN_LOG}
+	NETWORK_STATUS=false
         restart_if_wan
         sleep 30
     else
