@@ -65,6 +65,7 @@ while true; do
             /sbin/reboot
         fi
         echo "$(date '+%Y-%m-%d %H:%M:%S'): Network is unreachable, try to reset" >> ${QMI_LOG}
+        NETWORK_STATUS=false
         set_device_operating_mode ${QMI_DEV} reset
         sleep 30
     else
