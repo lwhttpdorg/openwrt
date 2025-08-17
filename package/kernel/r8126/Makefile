@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=r8126
-PKG_VERSION:=10.013.00
-PKG_RELEASE:=4
+PKG_VERSION:=10.015.00
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://github.com/openwrt/rtl8126/releases/download/$(PKG_VERSION)
-PKG_HASH:=b41bda6ff3bbb7d9bc5b81c5c21355f031587d3a3a5862abcd4d766e942272e7
+PKG_HASH:=fac513aa925264a95b053e7532fcda56022d29db288f6625fafee2759a8a6124
 
 PKG_BUILD_PARALLEL:=1
 PKG_LICENSE:=GPLv2
@@ -20,19 +20,22 @@ define KernelPackage/r8126
   TITLE:=Realtek RTL8126 PCI 5 Gigabit Ethernet driver
   DEPENDS:=@PCI_SUPPORT +kmod-libphy
   FILES:=$(PKG_BUILD_DIR)/src/r8126.ko
-  AUTOLOAD:=$(call AutoProbe,r8126)
+  AUTOLOAD:=$(call AutoProbe,r8126,1)
   PROVIDES:=kmod-r8169
   VARIANT:=regular
 endef
 
 define KernelPackage/r8126-rss
 $(call KernelPackage/r8126)
+  CONFLICTS:=kmod-r8126
   TITLE+= (RSS)
   VARIANT:=rss
 endef
 
 ifeq ($(BUILD_VARIANT),rss)
-  PKG_MAKE_FLAGS += ENABLE_RSS_SUPPORT=y
+  PKG_MAKE_FLAGS += \
+    ENABLE_MULTIPLE_TX_QUEUE=y \
+    ENABLE_RSS_SUPPORT=y
 endif
 
 define Build/Compile

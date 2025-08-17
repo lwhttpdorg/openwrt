@@ -323,7 +323,7 @@ SVN-Revision: 35130
  		icmpv6_param_prob(skb, ICMPV6_HDR_FIELD, optoff+2);
 --- a/include/linux/types.h
 +++ b/include/linux/types.h
-@@ -231,5 +231,11 @@ typedef void (*swap_func_t)(void *a, voi
+@@ -232,5 +232,11 @@ typedef void (*swap_func_t)(void *a, voi
  typedef int (*cmp_r_func_t)(const void *a, const void *b, const void *priv);
  typedef int (*cmp_func_t)(const void *a, const void *b);
  
@@ -337,7 +337,7 @@ SVN-Revision: 35130
  #endif /* _LINUX_TYPES_H */
 --- a/net/ipv4/af_inet.c
 +++ b/net/ipv4/af_inet.c
-@@ -1490,8 +1490,8 @@ struct sk_buff *inet_gro_receive(struct
+@@ -1488,8 +1488,8 @@ struct sk_buff *inet_gro_receive(struct
  	if (unlikely(ip_fast_csum((u8 *)iph, 5)))
  		goto out;
  
@@ -751,7 +751,7 @@ SVN-Revision: 35130
  EXPORT_SYMBOL(xfrm_parse_spi);
 --- a/net/ipv4/tcp_input.c
 +++ b/net/ipv4/tcp_input.c
-@@ -4201,14 +4201,16 @@ static bool tcp_parse_aligned_timestamp(
+@@ -4243,14 +4243,16 @@ static bool tcp_parse_aligned_timestamp(
  {
  	const __be32 *ptr = (const __be32 *)(th + 1);
  
@@ -858,7 +858,7 @@ SVN-Revision: 35130
  
 --- a/net/ipv4/tcp_offload.c
 +++ b/net/ipv4/tcp_offload.c
-@@ -226,7 +226,7 @@ struct sk_buff *tcp_gro_receive(struct l
+@@ -229,7 +229,7 @@ struct sk_buff *tcp_gro_receive(struct l
  
  		th2 = tcp_hdr(p);
  
@@ -867,7 +867,7 @@ SVN-Revision: 35130
  			NAPI_GRO_CB(p)->same_flow = 0;
  			continue;
  		}
-@@ -244,8 +244,8 @@ found:
+@@ -247,8 +247,8 @@ found:
  		  ~(TCP_FLAG_CWR | TCP_FLAG_FIN | TCP_FLAG_PSH));
  	flush |= (__force int)(th->ack_seq ^ th2->ack_seq);
  	for (i = sizeof(*th); i < thlen; i += 4)

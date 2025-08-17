@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=r8125
-PKG_VERSION:=9.013.02
-PKG_RELEASE:=4
+PKG_VERSION:=9.016.00
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://github.com/openwrt/rtl8125/releases/download/$(PKG_VERSION)
-PKG_HASH:=d36410ee99c956f250d9cd08340d8c36567d190f420a8ee128ff6e51225aac0c
+PKG_HASH:=cd1955dd07d2f5a6faaa210ffc4e8af992421295a32ab6ddcfa759bed9eba922
 
 PKG_BUILD_PARALLEL:=1
 PKG_LICENSE:=GPLv2
@@ -20,19 +20,23 @@ define KernelPackage/r8125
   TITLE:=Realtek RTL8125 PCI 2.5 Gigabit Ethernet driver
   DEPENDS:=@PCI_SUPPORT +kmod-libphy
   FILES:=$(PKG_BUILD_DIR)/src/r8125.ko
-  AUTOLOAD:=$(call AutoProbe,r8125)
+  AUTOLOAD:=$(call AutoProbe,r8125,1)
   PROVIDES:=kmod-r8169
   VARIANT:=regular
+  PKG_MAKE_FLAGS += CONFIG_ASPM=n
 endef
 
 define KernelPackage/r8125-rss
 $(call KernelPackage/r8125)
+  CONFLICTS:=kmod-r8125
   TITLE+= (RSS)
   VARIANT:=rss
 endef
 
 ifeq ($(BUILD_VARIANT),rss)
-  PKG_MAKE_FLAGS += ENABLE_RSS_SUPPORT=y
+  PKG_MAKE_FLAGS += \
+    ENABLE_MULTIPLE_TX_QUEUE=y \
+    ENABLE_RSS_SUPPORT=y
 endif
 
 define Build/Compile
