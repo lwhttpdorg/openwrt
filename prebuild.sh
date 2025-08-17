@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Open app filter
+git clone https://github.com/destan19/OpenAppFilter.git package/OpenAppFilter
+
 #git pull
 ./scripts/feeds update -a
 ./scripts/feeds update -a
