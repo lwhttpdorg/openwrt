@@ -572,7 +572,7 @@ endef
 define U-Boot/mt7986_bananapi_bpi-r3-mini-emmc
   NAME:=BananaPi BPi-R3 mini
   BUILD_SUBTARGET:=filogic
-  BUILD_DEVICES:=bananapi_bpi-r3-mini
+  BUILD_DEVICES:=bananapi_bpi-r3-mini-emmc
   UBOOT_CONFIG:=mt7986a_bpi-r3-mini-emmc
   UBOOT_IMAGE:=u-boot.fip
   BL2_BOOTDEV:=emmc
@@ -584,7 +584,7 @@ endef
 define U-Boot/mt7986_bananapi_bpi-r3-mini-snand
   NAME:=BananaPi BPi-R3 mini
   BUILD_SUBTARGET:=filogic
-  BUILD_DEVICES:=bananapi_bpi-r3-mini
+  BUILD_DEVICES:=bananapi_bpi-r3-mini-snand
   UBOOT_CONFIG:=mt7986a_bpi-r3-mini-snand
   UBOOT_IMAGE:=u-boot.fip
   BL2_BOOTDEV:=spim-nand-ubi
