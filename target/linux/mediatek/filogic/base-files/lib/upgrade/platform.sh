@@ -69,6 +69,8 @@ platform_do_upgrade() {
 	abt,asr3000|\
 	bananapi,bpi-r3|\
 	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r3-mini-emmc|\
+	bananapi,bpi-r3-mini-snand|\
 	bananapi,bpi-r4|\
 	bananapi,bpi-r4-poe|\
 	cmcc,a10-ubootmod|\
@@ -198,6 +200,8 @@ platform_check_image() {
 	case "$board" in
 	bananapi,bpi-r3|\
 	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r3-mini-emmc|\
+	bananapi,bpi-r3-mini-snand|\
 	bananapi,bpi-r4|\
 	bananapi,bpi-r4-poe|\
 	cmcc,rax3000m)
@@ -220,6 +224,8 @@ platform_copy_config() {
 	case "$(board_name)" in
 	bananapi,bpi-r3|\
 	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r3-mini-emmc|\
+	bananapi,bpi-r3-mini-snand|\
 	bananapi,bpi-r4|\
 	bananapi,bpi-r4-poe|\
 	cmcc,rax3000m)

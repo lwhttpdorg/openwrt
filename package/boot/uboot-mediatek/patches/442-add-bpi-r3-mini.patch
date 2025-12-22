@@ -299,7 +299,7 @@
 +console=earlycon=uart8250,mmio32,0x11002000 console=ttyS0
 +bootargs=root=ubi.block=0,fit root=/dev/fit0 rootwait
 +bootcmd=if pstore check ; then run boot_recovery ; else run boot_ubi ; fi
-+bootconf=config-mt7986a-bananapi-bpi-r3-mini
++bootconf=config-mt7986a-bananapi-bpi-r3-mini-snand
 +bootdelay=0
 +bootfile=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-snand-initramfs-recovery.itb
 +bootfile_bl2=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-snand-preloader.bin
@@ -363,7 +363,7 @@
 +console=earlycon=uart8250,mmio32,0x11002000 console=ttyS0
 +bootargs=root=/dev/fit0 rootwait
 +bootcmd=if pstore check ; then run boot_recovery ; else run boot_emmc ; fi
-+bootconf=config-mt7986a-bananapi-bpi-r3-mini
++bootconf=config-mt7986a-bananapi-bpi-r3-mini-emmc
 +bootdelay=0
 +bootfile=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-initramfs-recovery.itb
 +bootfile_bl2=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-preloader.bin
@@ -430,7 +430,7 @@
 +	#address-cells = <1>;
 +	#size-cells = <1>;
 +	model = "BananaPi BPi-R3 mini";
-+	compatible = "mediatek,mt7986", "mediatek,mt7986-rfb";
++	compatible = "bananapi,bpi-r3-mini-emmc", "bananapi,bpi-r3-mini-snand", "mediatek,mt7986a", "mediatek,mt7986", "mediatek,mt7986-rfb";
 +
 +	chosen {
 +		stdout-path = &uart0;
