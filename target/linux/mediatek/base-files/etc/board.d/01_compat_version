@@ -1,0 +1,16 @@
+#!/bin/sh
+
+. /lib/functions.sh
+. /lib/functions/board.sh
+
+board=$(board_name)
+
+case "$board" in
+    bananapi,bpi-r3-mini-emmc|\
+    bananapi,bpi-r3-mini-snand|\
+    bananapi,bpi-r3-mini)
+        board_json_add_compat_version "1.2"
+        ;;
+esac
+
+exit 0
