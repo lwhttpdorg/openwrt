@@ -1,0 +1,32 @@
+#!/bin/sh /etc/rc.common
+
+STOP=10
+
+
+restart() {
+    wan_watchdog_pid=$(ps|grep wan_watchdog.sh|grep -v grep|awk '{print $1}')
+    kill ${wan_watchdog_pid}
+    sleep 1 # give time to shutdown
+    /usr/bin/wan_watchdog.sh &
+}
+
+start() {
+    wan_watchdog_pid=$(ps|grep wan_watchdog.sh|grep -v grep|awk '{print $1}')
+    if [ -z "${wan_watchdog_pid}" ]
+    then
+        echo "WAN watchdog is started"
+        /usr/bin/wan_watchdog.sh &
+    else
+        echo "WAN watchdog is already running"
+    fi
+}
+
+stop() {
+    wan_watchdog_pid=$(ps|grep wan_watchdog.sh|grep -v grep|awk '{print $1}')
+    if [ -n "${wan_watchdog_pid}" ]
+    then
+        kill ${wan_watchdog_pid}
+    fi
+    return 0
+}
+

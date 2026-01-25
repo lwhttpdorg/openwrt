@@ -3,6 +3,7 @@
 START=96
  
 start() {
-	echo "pwmfan started"
-	/usr/bin/start-pwmfan.sh > /dev/null&
+    echo "pwmfan started"
+    /usr/bin/start-pwmfan.sh > /dev/null&
 }
+

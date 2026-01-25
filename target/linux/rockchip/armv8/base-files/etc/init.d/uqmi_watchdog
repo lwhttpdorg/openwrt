@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+
+STOP=10
+
+
+restart() {
+    uqmi_pid=$(ps|grep uqmi_watchdog.sh|grep -v grep|awk '{print $1}')
+    kill ${uqmi_pid}
+    sleep 1 # give time to shutdown
+    /usr/bin/uqmi_watchdog.sh &
+}
+
+start() {
+    uqmi_pid=$(ps|grep uqmi_watchdog.sh|grep -v grep|awk '{print $1}')
+    if [ -z "${uqmi_pid}" ]
+    then
+        echo "UQMI watchdog is started"
+        /usr/bin/uqmi_watchdog.sh &
+    else
+        echo "UQMI watchdog is already running"
+    fi
+}
+
+stop() {
+    uqmi_pid=$(ps|grep uqmi_watchdog.sh|grep -v grep|awk '{print $1}')
+    if [ -n "${uqmi_pid}" ]
+    then
+        kill ${uqmi_pid}
+    fi
+    return 0
+}
