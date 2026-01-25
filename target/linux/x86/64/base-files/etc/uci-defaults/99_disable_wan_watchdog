@@ -1,4 +1,3 @@
 #!/bin/sh
 /etc/init.d/wan_watchdog disable
 exit 0
-

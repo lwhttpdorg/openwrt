@@ -1,4 +1,5 @@
 #!/bin/sh
 /etc/init.d/wan_watchdog disable
+/etc/init.d/uqmi_watchdog disable
 exit 0
 
