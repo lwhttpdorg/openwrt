@@ -80,12 +80,12 @@ function check_connectivity() {
 function on_network_recovery() {
     log "INFO" "Network recovery detected. Running post-recovery tasks."
 
-    check_and_recover_service "ddns" "dynamic_dns" "true"
+    check_and_recover_service "ddns" "dynamic_dns" "false"
 
-    check_and_recover_service "frpc" "frpc" "false"
+    check_and_recover_service "frpc" "frpc" "true"
 }
 
-log "INFO" "QMI watchdog started."
+log "INFO" "WAN watchdog started."
 
 FAILED_COUNT=0
 NETWORK_UP="false"
