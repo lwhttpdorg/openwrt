@@ -76,9 +76,9 @@ function check_connectivity() {
     fi
 }
 
-# Tasks to execute immediately after network restoration
+# Tasks to execute after network becomes reachable.
 function on_network_recovery() {
-    log "INFO" "Network recovery detected. Running post-recovery tasks."
+    log "INFO" "Network is reachable. Running post-network tasks."
 
     check_and_recover_service "ddns" "dynamic_dns" "false"
 
