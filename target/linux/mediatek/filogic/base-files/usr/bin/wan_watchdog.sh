@@ -15,38 +15,28 @@ function log() {
 # Generic service watchdog function
 # Param 1: service_name (for init.d)
 # Param 2: process_name (for ps grep)
-# Param 3: force_restart (true/false)
 function check_and_recover_service() {
     local svc=$1
     local proc=$2
-    local force=$3
 
     # Only attempt recovery if the service is explicitly enabled
     # 0 means enabled in OpenWrt
     /etc/init.d/"${svc}" enabled
     if [ $? -ne 0 ]; then
-        log "INFO" "Service '${svc}' is disabled, nothing to do."
+        log "INFO" "service '${svc}' is disabled. skip..."
         return
     fi
 
-    if [ "$force" = "true" ]; then
-        log "WARN" "Service '${svc}' requires force restart. Restarting..."
-        /etc/init.d/"${svc}" restart
-    return
-    fi
     # Check if the process is actually running
     if ps | grep -v "grep" | grep "${proc}"; then
-        log "INFO" "Service '${svc}' (${proc}) is already running."
+        log "INFO" "service '${svc}' (${proc}) is running. do nothing."
     else
-        log "WARN" "Service '${svc}' (${proc}) is not running. Starting..."
+        log "WARN" "service '${svc}' (${proc}) is not running. start it..."
         /etc/init.d/"${svc}" restart
+        if [ $? -ne 0 ]; then
+            log "ERROR" "failed to restart service '${svc}' (${proc})."
+        fi
     fi
-}
-
-function restart_if_wan() {
-    ifdown wan
-    sleep 1
-    ifup wan
 }
 
 # Network connectivity check
@@ -54,64 +44,67 @@ function check_connectivity() {
     local dnspod="119.29.29.29"
     local alidns="223.5.5.5"
     local retries=6
-    local packets_responded=0
+    local reachable=0
 
-    for i in $(seq 1 $retries); do
+    for i in $(seq 1 "${retries}"); do
+        # Priority: try DNSPod first, then AliDNS.
         if ping -c 4 -W 3 "${dnspod}" > /dev/null 2>&1; then
-            ((packets_responded++))
-            sleep 3
+            reachable=1
+            break
         elif ping -c 4 -W 3 "${alidns}" > /dev/null 2>&1; then
-            ((packets_responded++))
-            sleep 3
+            reachable=1
+            break
         else
             log "WARN" "Ping failed on retry ${i}."
+            sleep 3
         fi
     done
 
-    if [ "${packets_responded}" -ge 2 ]; then
-        echo "true"
-    else
-        log "WARN" "Network check failed. Packets responded: ${packets_responded}."
-        echo "false"
+    if [ "${reachable}" -eq 1 ]; then
+        return 0
     fi
+    return 1
 }
 
 # Tasks to execute after network becomes reachable.
-function on_network_recovery() {
-    log "INFO" "Network is reachable. Running post-network tasks."
-
-    check_and_recover_service "ddns" "dynamic_dns" "false"
-
-    check_and_recover_service "frpc" "frpc" "true"
+function post_network_recovery() {
+    log "INFO" "network is reachable. run post-network recovery tasks."
+    check_and_recover_service "ddns" "dynamic_dns"
+    check_and_recover_service "frpc" "frpc"
 }
 
-log "INFO" "WAN watchdog started."
+# Restart WAN interface
+function restart_wan_interface() {
+    log "INFO" "restart WAN interface."
+    ifdown wan
+    sleep 1
+    ifup wan
+}
+
+log "INFO" "WAN watchdog is running..."
 
 FAILED_COUNT=0
-NETWORK_UP="false"
+NETWORK_STATUS=0
 
 while true; do
-    if [ "$(check_connectivity)" = "false" ]; then
+    if ! check_connectivity; then
         ((FAILED_COUNT++))
         if [ "${FAILED_COUNT}" -ge "${MAX_FAILED_COUNT}" ]; then
-            log "FATAL" "Network dead after ${MAX_FAILED_COUNT} retries. Rebooting system."
+            log "FATAL" "network down after ${MAX_FAILED_COUNT} retries. reboot system."
             /sbin/reboot
         else
-        log "WARN" "Network down, restart WAN interface..."
-            NETWORK_UP=false
-            restart_if_wan
-            sleep 30
+            log "WARN" "network down ${FAILED_COUNT}/${MAX_FAILED_COUNT})."
+            NETWORK_STATUS=0
+            restart_wan_interface
+            sleep 10
         fi
     else
-        # Network is healthy
-        if [ "${NETWORK_UP}" = "false" ]; then
-            NETWORK_UP="true"
+        # network is reachable
+        if [ $NETWORK_STATUS -eq 0 ]; then
+            NETWORK_STATUS=1
             FAILED_COUNT=0
-            log "INFO" "Network is now reachable."
-            on_network_recovery
+            post_network_recovery
         fi
+        sleep "${CHECK_INTERVAL}"
     fi
-
-    sleep "${CHECK_INTERVAL}"
 done
-
