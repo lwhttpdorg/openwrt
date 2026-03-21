@@ -16,7 +16,7 @@
 / {
 	model = "BananaPi BPi-R3 mini";
 	chassis-type = "embedded";
-	compatible = "bananapi,bpi-r3-mini-emmc", "bananapi,bpi-r3-mini-snand", "bananapi,bpi-r3-mini", "mediatek,mt7986a";
+	compatible = "bananapi,bpi-r3-mini", "mediatek,mt7986a";
 
 	aliases {
 		ethernet0 = &gmac0;

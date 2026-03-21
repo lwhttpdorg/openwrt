@@ -430,16 +430,16 @@ define Device/bananapi_bpi-r3-mini-common
   DEVICE_DTS_DIR := ../dts
   DEVICE_DTS_LOADADDR := 0x43f00000
   DEVICE_PACKAGES := kmod-eeprom-at24 kmod-hwmon-pwmfan kmod-mt7915e kmod-mt7986-firmware \
-	  kmod-phy-airoha-en8811h kmod-usb3 e2fsprogs f2fsck mkf2fs mt7986-wo-firmware \
-	  automount
+    kmod-phy-airoha-en8811h kmod-usb3 e2fsprogs f2fsck mkf2fs mt7986-wo-firmware \
+    automount
   KERNEL_LOADADDR := 0x44000000
   KERNEL := kernel-bin | gzip
   KERNEL_INITRAMFS := kernel-bin | lzma | \
-	  fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb with-initrd | pad-to 64k
+    fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb with-initrd | pad-to 64k
   KERNEL_INITRAMFS_SUFFIX := -recovery.itb
   IMAGE/sysupgrade.itb := append-kernel | \
-	  fit gzip $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb external-static-with-rootfs | \
-	  pad-rootfs | append-metadata
+    fit gzip $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb external-static-with-rootfs | \
+    pad-rootfs | append-metadata
   DEVICE_COMPAT_VERSION := 1.2
   DEVICE_COMPAT_MESSAGE := Flash layout changes require bootloader update
 endef
@@ -468,15 +468,15 @@ ifeq ($(DUMP),)
 endif
   ARTIFACTS := factory.bin preloader.bin bl31-uboot.fip
   ARTIFACT/factory.bin := mt7986-bl2 spim-nand-ubi-ddr4 | pad-to 256k | \
-	  mt7986-bl2 spim-nand-ubi-ddr4 | pad-to 512k | \
-	  mt7986-bl2 spim-nand-ubi-ddr4 | pad-to 768k | \
-	  mt7986-bl2 spim-nand-ubi-ddr4 | pad-to 2048k | \
-	  ubinize-image fit squashfs-sysupgrade.itb
+    mt7986-bl2 spim-nand-ubi-ddr4 | pad-to 512k | \
+    mt7986-bl2 spim-nand-ubi-ddr4 | pad-to 768k | \
+    mt7986-bl2 spim-nand-ubi-ddr4 | pad-to 2048k | \
+    ubinize-image fit squashfs-sysupgrade.itb
   ARTIFACT/preloader.bin := mt7986-bl2 spim-nand-ubi-ddr4
   ARTIFACT/bl31-uboot.fip := mt7986-bl31-uboot bananapi_bpi-r3-mini-snand
   UBINIZE_PARTS := fip=:$(STAGING_DIR_IMAGE)/mt7986_bananapi_bpi-r3-mini-snand-u-boot.fip
 ifneq ($(CONFIG_PACKAGE_airoha-en8811h-firmware),)
-	UBINIZE_PARTS += en8811h-fw=:$(STAGING_DIR_IMAGE)/EthMD32.bin
+  UBINIZE_PARTS += en8811h-fw=:$(STAGING_DIR_IMAGE)/EthMD32.bin
 endif
 endef
 TARGET_DEVICES += bananapi_bpi-r3-mini-snand

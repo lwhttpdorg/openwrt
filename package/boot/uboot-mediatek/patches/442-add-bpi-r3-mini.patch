@@ -430,7 +430,7 @@
 +	#address-cells = <1>;
 +	#size-cells = <1>;
 +	model = "BananaPi BPi-R3 mini";
-+	compatible = "bananapi,bpi-r3-mini-emmc", "bananapi,bpi-r3-mini-snand", "mediatek,mt7986a", "mediatek,mt7986", "mediatek,mt7986-rfb";
++	compatible = "bananapi,bpi-r3-mini", "mediatek,mt7986a", "mediatek,mt7986", "mediatek,mt7986-rfb";
 +
 +	chosen {
 +		stdout-path = &uart0;

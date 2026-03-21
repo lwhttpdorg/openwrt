@@ -50,7 +50,6 @@ case "$board" in
 		[ "$PHYNBR" = "1" ] && echo "$addr" > /sys${DEVPATH}/macaddress
 		;;
 	bananapi,bpi-r3|\
-	bananapi,bpi-r3-mini|\
 	bananapi,bpi-r3-mini-emmc|\
 	bananapi,bpi-r3-mini-snand)
 		addr=$(cat /sys/class/net/eth0/address)
