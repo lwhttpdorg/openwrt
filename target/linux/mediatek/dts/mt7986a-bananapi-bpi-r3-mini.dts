@@ -119,10 +119,9 @@
 		gpios = <&pio 20 GPIO_ACTIVE_LOW>;
 		regulator-boot-on;
 	};
-};
 
-/* WiFi thermal zones - from start-pwmfan.sh wifi_temp_set (70,65,60,55,50,45,40°C) */
-thermal-zones {
+	/* WiFi thermal zones - from start-pwmfan.sh wifi_temp_set (70,65,60,55,50,45,40°C) */
+	thermal-zones {
 	wifi0-thermal {
 		polling-delay-passive = <1000>;
 		polling-delay = <1000>;
@@ -229,6 +228,7 @@ thermal-zones {
 			wifi1-active-high { cooling-device = <&fan 5 5>; trip = <&wifi1_trip_high>; };
 			wifi1-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi1_trip_hot>; };
 		};
+	};
 	};
 };
 
