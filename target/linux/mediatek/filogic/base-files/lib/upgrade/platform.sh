@@ -82,7 +82,8 @@ platform_do_upgrade() {
 	acer,predator-w6x-ubootmod|\
 	asus,zenwifi-bt8-ubootmod|\
 	bananapi,bpi-r3|\
-	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r3-mini-emmc|\
+	bananapi,bpi-r3-mini-snand|\
 	bananapi,bpi-r4|\
 	bananapi,bpi-r4-2g5|\
 	bananapi,bpi-r4-poe|\
@@ -276,7 +277,8 @@ platform_check_image() {
 	acer,predator-w6x-ubootmod|\
 	asus,zenwifi-bt8-ubootmod|\
 	bananapi,bpi-r3|\
-	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r3-mini-emmc|\
+	bananapi,bpi-r3-mini-snand|\
 	bananapi,bpi-r4|\
 	bananapi,bpi-r4-2g5|\
 	bananapi,bpi-r4-poe|\
@@ -337,7 +339,8 @@ platform_check_image() {
 platform_copy_config() {
 	case "$(board_name)" in
 	bananapi,bpi-r3|\
-	bananapi,bpi-r3-mini|\
+	bananapi,bpi-r3-mini-emmc|\
+	bananapi,bpi-r3-mini-snand|\
 	bananapi,bpi-r4|\
 	bananapi,bpi-r4-2g5|\
 	bananapi,bpi-r4-poe|\

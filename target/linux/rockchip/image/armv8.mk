@@ -143,7 +143,7 @@ define Device/friendlyarm_nanopi-r5c
   $(Device/rk3568)
   DEVICE_VENDOR := FriendlyARM
   DEVICE_MODEL := NanoPi R5C
-  DEVICE_PACKAGES := kmod-r8169 kmod-rtw88-8822ce rtl8822ce-firmware wpad-basic-mbedtls
+  DEVICE_PACKAGES := kmod-r8169 kmod-rtw88-8822ce rtl8822ce-firmware wpad-openssl
 endef
 TARGET_DEVICES += friendlyarm_nanopi-r5c
 
@@ -176,7 +176,7 @@ define Device/friendlyarm_nanopi-r76s
   DEVICE_VENDOR := FriendlyARM
   DEVICE_MODEL := NanoPi R76S
   UBOOT_DEVICE_NAME := generic-rk3576
-  DEVICE_PACKAGES := kmod-r8169 kmod-rtw88-8822cs wpad-basic-mbedtls
+  DEVICE_PACKAGES := kmod-r8169 kmod-rtw88-8822cs wpad-openssl
 endef
 TARGET_DEVICES += friendlyarm_nanopi-r76s
 
@@ -331,7 +331,7 @@ define Device/radxa_rock-5-itx
   $(Device/rk3588)
   DEVICE_VENDOR := Radxa
   DEVICE_MODEL := ROCK 5 ITX/ITX+
-  DEVICE_PACKAGES := blkdiscard block-mount kmod-ata-ahci kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-basic-mbedtls
+  DEVICE_PACKAGES := blkdiscard block-mount kmod-ata-ahci kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-openssl
 endef
 TARGET_DEVICES += radxa_rock-5-itx
 
@@ -340,7 +340,7 @@ define Device/radxa_rock-5a
   DEVICE_VENDOR := Radxa
   DEVICE_MODEL := ROCK 5A
   UBOOT_DEVICE_NAME := rock5a-rk3588s
-  DEVICE_PACKAGES := blkdiscard block-mount kmod-ata-ahci kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-basic-mbedtls
+  DEVICE_PACKAGES := blkdiscard block-mount kmod-ata-ahci kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-openssl
 endef
 TARGET_DEVICES += radxa_rock-5a
 
@@ -349,7 +349,7 @@ define Device/radxa_rock-5b
   DEVICE_VENDOR := Radxa
   DEVICE_MODEL := ROCK 5B
   UBOOT_DEVICE_NAME := rock5b-rk3588
-  DEVICE_PACKAGES := blkdiscard block-mount kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-basic-mbedtls
+  DEVICE_PACKAGES := blkdiscard block-mount kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-openssl
 endef
 TARGET_DEVICES += radxa_rock-5b
 
@@ -359,7 +359,7 @@ define Device/radxa_rock-5b-plus
   DEVICE_MODEL := ROCK 5B+
   UBOOT_DEVICE_NAME := generic-rk3588
   DEVICE_DTS := rk3588-rock-5b-plus
-  DEVICE_PACKAGES := blkdiscard block-mount kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-basic-mbedtls
+  DEVICE_PACKAGES := blkdiscard block-mount kmod-hwmon-pwmfan kmod-nvme kmod-r8169 kmod-rtw89-8852be wpad-openssl
 endef
 TARGET_DEVICES += radxa_rock-5b-plus
 
@@ -377,7 +377,7 @@ define Device/radxa_rock-5t
   DEVICE_MODEL := ROCK 5T
   UBOOT_DEVICE_NAME := generic-rk3588
   DEVICE_DTS := rk3588-rock-5t
-  DEVICE_PACKAGES := blkdiscard block-mount iwlwifi-firmware-ax210 kmod-hwmon-pwmfan kmod-iwlwifi kmod-nvme kmod-r8169 wpad-basic-mbedtls
+  DEVICE_PACKAGES := blkdiscard block-mount iwlwifi-firmware-ax210 kmod-hwmon-pwmfan kmod-iwlwifi kmod-nvme kmod-r8169 wpad-openssl
 endef
 TARGET_DEVICES += radxa_rock-5t
 
@@ -402,7 +402,7 @@ define Device/radxa_rock-pi-e-v3
   DEVICE_VENDOR := Radxa
   DEVICE_MODEL := ROCK Pi E v3.0
   DEVICE_DTS := rk3328-rock-pi-e
-  DEVICE_PACKAGES := kmod-rtw88-8723du kmod-rtw88-8821cu kmod-usb-net-cdc-ncm kmod-usb-net-rndis wpad-basic-mbedtls
+  DEVICE_PACKAGES := kmod-rtw88-8723du kmod-rtw88-8821cu kmod-usb-net-cdc-ncm kmod-usb-net-rndis wpad-openssl
 endef
 TARGET_DEVICES += radxa_rock-pi-e-v3
 
@@ -412,7 +412,7 @@ define Device/radxa_rock-pi-s
   DEVICE_MODEL := ROCK Pi S
   SUPPORTED_DEVICES := radxa,rockpis
   BOOT_SCRIPT := rock-pi-s
-  DEVICE_PACKAGES := kmod-rtw88-8723ds kmod-usb-net-cdc-ncm kmod-usb-net-rndis wpad-basic-mbedtls
+  DEVICE_PACKAGES := kmod-rtw88-8723ds kmod-usb-net-cdc-ncm kmod-usb-net-rndis wpad-openssl
 endef
 TARGET_DEVICES += radxa_rock-pi-s
 

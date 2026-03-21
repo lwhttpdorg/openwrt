@@ -1,6 +1,9 @@
-// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 /*
- * Copyright (C) 2023 Tianling Shen <cnsztl@immortalwrt.org>
+ * Copyright (C) 2021 MediaTek Inc.
+ * Authors: Sam.Shih <sam.shih@mediatek.com>
+ *          Frank Wunderlich <frank-w@public-files.de>
+ *          Daniel Golle <daniel@makrotopia.org>
  */
 
 /dts-v1/;
@@ -12,7 +15,7 @@
 #include "mt7986a.dtsi"
 
 / {
-	model = "Bananapi BPi-R3 Mini";
+	model = "BananaPi BPi-R3 mini";
 	chassis-type = "embedded";
 	compatible = "bananapi,bpi-r3-mini", "mediatek,mt7986a";
 
@@ -75,8 +78,9 @@
 	fan: pwm-fan {
 		compatible = "pwm-fan";
 		#cooling-cells = <2>;
-		cooling-levels = <255 128 80 0>;
-		pwms = <&pwm 0 10000 0>;
+		/* cooling levels from start-pwmfan.sh: 0%, 10%, 20%, 30%, 40%, 50%, 60% duty */
+		cooling-levels = <0 26 51 77 102 128 153>;
+		pwms = <&pwm 0 50000 0>;
 		status = "okay";
 	};
 
@@ -117,25 +121,200 @@
 	};
 };
 
+/* WiFi thermal zones - from start-pwmfan.sh wifi_temp_set (70,65,60,55,50,45,40°C) */
+thermal-zones {
+	wifi0-thermal {
+		polling-delay-passive = <1000>;
+		polling-delay = <1000>;
+		thermal-sensors = <&wifi 0>;
+
+		trips {
+			wifi0_trip_silent: active-silent {
+				temperature = <40000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi0_trip_low: active-low {
+				temperature = <45000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi0_trip_med_low: active-med-low {
+				temperature = <50000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi0_trip_med: active-med {
+				temperature = <55000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi0_trip_med_high: active-med-high {
+				temperature = <60000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi0_trip_high: active-high {
+				temperature = <65000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi0_trip_hot: active-hot {
+				temperature = <70000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+		};
+
+		cooling-maps {
+			wifi0-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi0_trip_silent>; };
+			wifi0-active-low { cooling-device = <&fan 1 1>; trip = <&wifi0_trip_low>; };
+			wifi0-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi0_trip_med_low>; };
+			wifi0-active-med { cooling-device = <&fan 3 3>; trip = <&wifi0_trip_med>; };
+			wifi0-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi0_trip_med_high>; };
+			wifi0-active-high { cooling-device = <&fan 5 5>; trip = <&wifi0_trip_high>; };
+			wifi0-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi0_trip_hot>; };
+		};
+	};
+
+	wifi1-thermal {
+		polling-delay-passive = <1000>;
+		polling-delay = <1000>;
+		thermal-sensors = <&wifi 1>;
+
+		trips {
+			wifi1_trip_silent: active-silent {
+				temperature = <40000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi1_trip_low: active-low {
+				temperature = <45000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi1_trip_med_low: active-med-low {
+				temperature = <50000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi1_trip_med: active-med {
+				temperature = <55000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi1_trip_med_high: active-med-high {
+				temperature = <60000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi1_trip_high: active-high {
+				temperature = <65000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+			wifi1_trip_hot: active-hot {
+				temperature = <70000>;
+				hysteresis = <2000>;
+				type = "active";
+			};
+		};
+
+		cooling-maps {
+			wifi1-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi1_trip_silent>; };
+			wifi1-active-low { cooling-device = <&fan 1 1>; trip = <&wifi1_trip_low>; };
+			wifi1-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi1_trip_med_low>; };
+			wifi1-active-med { cooling-device = <&fan 3 3>; trip = <&wifi1_trip_med>; };
+			wifi1-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi1_trip_med_high>; };
+			wifi1-active-high { cooling-device = <&fan 5 5>; trip = <&wifi1_trip_high>; };
+			wifi1-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi1_trip_hot>; };
+		};
+	};
+};
+
 &auxadc {
 	status = "okay";
 };
 
 &cpu_thermal {
 	cooling-maps {
+		cpu-active-silent {
+			cooling-device = <&fan 0 0>;
+			trip = <&cpu_trip_active_silent>;
+		};
+
 		cpu-active-low {
 			cooling-device = <&fan 1 1>;
 			trip = <&cpu_trip_active_low>;
 		};
 
-		cpu-active-med {
+		cpu-active-med-low {
 			cooling-device = <&fan 2 2>;
+			trip = <&cpu_trip_active_med_low>;
+		};
+
+		cpu-active-med {
+			cooling-device = <&fan 3 3>;
 			trip = <&cpu_trip_active_med>;
 		};
 
+		cpu-active-med-high {
+			cooling-device = <&fan 4 4>;
+			trip = <&cpu_trip_active_med_high>;
+		};
+
 		cpu-active-high {
-			cooling-device = <&fan 3 3>;
+			cooling-device = <&fan 5 5>;
 			trip = <&cpu_trip_active_high>;
+		};
+
+		cpu-active-hot {
+			cooling-device = <&fan 6 6>;
+			trip = <&cpu_trip_active_hot>;
+		};
+	};
+
+	trips {
+		cpu_trip_active_silent: active-silent {
+			temperature = <30000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+
+		cpu_trip_active_low: active-low {
+			temperature = <35000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+
+		cpu_trip_active_med_low: active-med-low {
+			temperature = <40000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+
+		cpu_trip_active_med: active-med {
+			temperature = <45000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+
+		cpu_trip_active_med_high: active-med-high {
+			temperature = <50000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+
+		cpu_trip_active_high: active-high {
+			temperature = <55000>;
+			hysteresis = <2000>;
+			type = "active";
+		};
+
+		cpu_trip_active_hot: active-hot {
+			temperature = <60000>;
+			hysteresis = <2000>;
+			type = "active";
 		};
 	};
 };
@@ -168,7 +347,9 @@
 		#size-cells = <0>;
 
 		phy14: phy@e {
+			/* EN8811H PHY ID */
 			compatible = "ethernet-phy-id03a2.a411";
+			/* PHY Address */
 			reg = <14>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&en8811_pwr_a>;
@@ -204,7 +385,9 @@
 		};
 
 		phy15: phy@f {
+			/* EN8811H PHY ID */
 			compatible = "ethernet-phy-id03a2.a411";
+			/* PHY Address */
 			reg = <15>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&en8811_pwr_b>;
@@ -241,16 +424,29 @@
 	};
 };
 
+&hnat {
+	mtketh-wan = "eth1";
+	mtketh-lan = "eth0";
+	mtketh-max-gmac = <2>;
+	status = "okay";
+};
+
 &i2c0 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&i2c_pins>;
 	status = "okay";
 
+	/* MAC Address EEPROM */
 	eeprom@50 {
 		compatible = "atmel,24c02";
 		reg = <0x50>;
 		pagesize = <8>;
 		size = <256>;
+	};
+
+	wm8960: wm8960@1a {
+		compatible = "wlf,wm8960";
+		reg = <0x1a>;
 	};
 };
 
@@ -430,6 +626,13 @@
 		};
 	};
 
+	uart2_pins: uart2-pins {
+		mux {
+			function = "uart";
+			groups = "uart2";
+		};
+	};
+
 	usb_ngff_pins: usb-ngff-pins {
 		ngff-gnss-off {
 			pins = "GPIO_6";
@@ -576,11 +779,18 @@
 	status = "okay";
 };
 
+&uart2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins>;
+	status = "disabled";
+};
+
 &watchdog {
 	status = "okay";
 };
 
 &wifi {
+	#thermal-sensor-cells = <1>;
 	pinctrl-names = "default", "dbdc";
 	pinctrl-0 = <&wf_2g_5g_pins>;
 	pinctrl-1 = <&wf_dbdc_pins>;

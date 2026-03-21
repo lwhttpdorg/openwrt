@@ -1,0 +1,113 @@
+From: OpenWrt
+Date: Sat, 21 Mar 2026 00:00:00 +0000
+Subject: [PATCH] arm64: dts: rockchip: Add PWM fan thermal control for NanoPi R2S
+
+Add pwm-fan and thermal cooling-maps based on start-rk3328-pwm-fan.sh:
+- cpu_temp_set: 60°C, 50°C, 45°C, 30°C
+- pwm_duty: 50%, 70%, 90%, 100% (cooling-levels: 128, 178, 230, 255)
+
+Signed-off-by: OpenWrt
+---
+ arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+
+--- a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
+@@ -65,6 +65,15 @@ wan_led: led-2 {
+ 		};
+ 	};
+ 
++	fan: pwm-fan {
++		compatible = "pwm-fan";
++		#cooling-cells = <2>;
++		/* 50%, 70%, 90%, 100% duty from start-rk3328-pwm-fan.sh */
++		cooling-levels = <128 178 230 255>;
++		pwms = <&pwm0 0 50000 0>;
++		status = "okay";
++	};
++
+ 	vcc_io_sdio: sdmmcio-regulator {
+ 		compatible = "regulator-gpio";
+ 		enable-active-high;
+@@ -342,10 +351,81 @@ sdio_vcc_pin: sdio-vcc-pin {
+ 	};
+ };
+ 
++&pwm0 {
++	status = "okay";
++};
++
+ &pwm2 {
+ 	status = "okay";
+ };
+ 
++&soc_thermal {
++	trips {
++		threshold: trip-point0 {
++			temperature = <70000>;
++			hysteresis = <2000>;
++			type = "passive";
++		};
++		target: trip-point1 {
++			temperature = <85000>;
++			hysteresis = <2000>;
++			type = "passive";
++		};
++		soc_crit: soc-crit {
++			temperature = <95000>;
++			hysteresis = <2000>;
++			type = "critical";
++		};
++		soc_fan0: soc-fan0 {
++			temperature = <30000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		soc_fan1: soc-fan1 {
++			temperature = <45000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		soc_fan2: soc-fan2 {
++			temperature = <50000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		soc_fan3: soc-fan3 {
++			temperature = <60000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++	};
++
++	cooling-maps {
++		map0 {
++			trip = <&target>;
++			cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++					 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++			contribution = <4096>;
++		};
++		fan_map0 {
++			trip = <&soc_fan0>;
++			cooling-device = <&fan 0 0>;
++		};
++		fan_map1 {
++			trip = <&soc_fan1>;
++			cooling-device = <&fan 1 1>;
++		};
++		fan_map2 {
++			trip = <&soc_fan2>;
++			cooling-device = <&fan 2 2>;
++		};
++		fan_map3 {
++			trip = <&soc_fan3>;
++			cooling-device = <&fan 3 3>;
++		};
++	};
++};
++
+ &sdmmc {
+ 	bus-width = <4>;
+ 	cap-sd-highspeed;

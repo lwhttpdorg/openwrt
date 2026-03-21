@@ -1,0 +1,218 @@
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts
+@@ -121,25 +121,195 @@
+ 
+ };
+ 
+-&cpu_thermal {
+-	cooling-maps {
+-		map0 {
+-			/* active: set fan to cooling level 2 */
+-			cooling-device = <&fan 2 2>;
+-			trip = <&cpu_trip_active_high>;
++/* WiFi thermal zones - from start-pwmfan.sh wifi_temp_set (70,65,60,55,50,45,40°C) */
++thermal-zones {
++	wifi0-thermal {
++		polling-delay-passive = <1000>;
++		polling-delay = <1000>;
++		thermal-sensors = <&wifi 0>;
++
++		trips {
++			wifi0_trip_silent: active-silent {
++				temperature = <40000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi0_trip_low: active-low {
++				temperature = <45000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi0_trip_med_low: active-med-low {
++				temperature = <50000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi0_trip_med: active-med {
++				temperature = <55000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi0_trip_med_high: active-med-high {
++				temperature = <60000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi0_trip_high: active-high {
++				temperature = <65000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi0_trip_hot: active-hot {
++				temperature = <70000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
+ 		};
+ 
+-		map1 {
+-			/* active: set fan to cooling level 1 */
+-			cooling-device = <&fan 1 1>;
+-			trip = <&cpu_trip_active_med>;
++		cooling-maps {
++			wifi0-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi0_trip_silent>; };
++			wifi0-active-low { cooling-device = <&fan 1 1>; trip = <&wifi0_trip_low>; };
++			wifi0-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi0_trip_med_low>; };
++			wifi0-active-med { cooling-device = <&fan 3 3>; trip = <&wifi0_trip_med>; };
++			wifi0-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi0_trip_med_high>; };
++			wifi0-active-high { cooling-device = <&fan 5 5>; trip = <&wifi0_trip_high>; };
++			wifi0-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi0_trip_hot>; };
++		};
++	};
++
++	wifi1-thermal {
++		polling-delay-passive = <1000>;
++		polling-delay = <1000>;
++		thermal-sensors = <&wifi 1>;
++
++		trips {
++			wifi1_trip_silent: active-silent {
++				temperature = <40000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi1_trip_low: active-low {
++				temperature = <45000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi1_trip_med_low: active-med-low {
++				temperature = <50000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi1_trip_med: active-med {
++				temperature = <55000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi1_trip_med_high: active-med-high {
++				temperature = <60000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi1_trip_high: active-high {
++				temperature = <65000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++			wifi1_trip_hot: active-hot {
++				temperature = <70000>;
++				hysteresis = <2000>;
++				type = "active";
++			};
++		};
++
++		cooling-maps {
++			wifi1-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi1_trip_silent>; };
++			wifi1-active-low { cooling-device = <&fan 1 1>; trip = <&wifi1_trip_low>; };
++			wifi1-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi1_trip_med_low>; };
++			wifi1-active-med { cooling-device = <&fan 3 3>; trip = <&wifi1_trip_med>; };
++			wifi1-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi1_trip_med_high>; };
++			wifi1-active-high { cooling-device = <&fan 5 5>; trip = <&wifi1_trip_high>; };
++			wifi1-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi1_trip_hot>; };
+ 		};
++	};
++};
+ 
+-		map2 {
+-			/* active: set fan to cooling level 0 */
++&cpu_thermal {
++	trips {
++		cpu_trip_crit: crit {
++			temperature = <125000>;
++			hysteresis = <2000>;
++			type = "critical";
++		};
++		cpu_trip_hot: hot {
++			temperature = <120000>;
++			hysteresis = <2000>;
++			type = "hot";
++		};
++		cpu_trip_active_silent: active-silent {
++			temperature = <30000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		cpu_trip_active_low: active-low {
++			temperature = <35000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		cpu_trip_active_med_low: active-med-low {
++			temperature = <40000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		cpu_trip_active_med: active-med {
++			temperature = <45000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		cpu_trip_active_med_high: active-med-high {
++			temperature = <50000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		cpu_trip_active_high: active-high {
++			temperature = <55000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		cpu_trip_active_hot: active-hot {
++			temperature = <60000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++	};
++
++	cooling-maps {
++		cpu-active-silent {
+ 			cooling-device = <&fan 0 0>;
++			trip = <&cpu_trip_active_silent>;
++		};
++		cpu-active-low {
++			cooling-device = <&fan 1 1>;
+ 			trip = <&cpu_trip_active_low>;
+ 		};
++		cpu-active-med-low {
++			cooling-device = <&fan 2 2>;
++			trip = <&cpu_trip_active_med_low>;
++		};
++		cpu-active-med {
++			cooling-device = <&fan 3 3>;
++			trip = <&cpu_trip_active_med>;
++		};
++		cpu-active-med-high {
++			cooling-device = <&fan 4 4>;
++			trip = <&cpu_trip_active_med_high>;
++		};
++		cpu-active-high {
++			cooling-device = <&fan 5 5>;
++			trip = <&cpu_trip_active_high>;
++		};
++		cpu-active-hot {
++			cooling-device = <&fan 6 6>;
++			trip = <&cpu_trip_active_hot>;
++		};
+ 	};
+ };
+ 
+@@ -481,6 +651,7 @@
+ };
+ 
+ &wifi {
++	#thermal-sensor-cells = <1>;
+ 	status = "okay";
+ 	pinctrl-names = "default", "dbdc";
+ 	pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;

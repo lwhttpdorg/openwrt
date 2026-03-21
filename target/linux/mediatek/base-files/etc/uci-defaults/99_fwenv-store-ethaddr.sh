@@ -10,7 +10,8 @@ unielec,u7623-02)
 		fw_setenv ethaddr "$(cat /sys/class/net/eth0/address)"
 	;;
 bananapi,bpi-r3|\
-bananapi,bpi-r3-mini|\
+bananapi,bpi-r3-mini-emmc|\
+bananapi,bpi-r3-mini-snand|\
 bananapi,bpi-r4|\
 bananapi,bpi-r4-2g5|\
 bananapi,bpi-r4-lite|\

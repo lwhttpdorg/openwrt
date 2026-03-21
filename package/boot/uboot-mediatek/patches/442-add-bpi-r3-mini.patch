@@ -22,7 +22,7 @@
 +CONFIG_DEBUG_UART=y
 +CONFIG_AHCI=y
 +CONFIG_FIT=y
-+CONFIG_BOOTDELAY=30
++CONFIG_BOOTDELAY=5
 +CONFIG_AUTOBOOT_KEYED=y
 +CONFIG_AUTOBOOT_MENU_SHOW=y
 +CONFIG_OF_SYSTEM_SETUP=y
@@ -167,7 +167,7 @@
 +CONFIG_DEBUG_UART=y
 +CONFIG_AHCI=y
 +CONFIG_FIT=y
-+CONFIG_BOOTDELAY=30
++CONFIG_BOOTDELAY=5
 +CONFIG_AUTOBOOT_KEYED=y
 +CONFIG_AUTOBOOT_MENU_SHOW=y
 +CONFIG_OF_SYSTEM_SETUP=y
@@ -298,10 +298,10 @@
 +bootcmd=if pstore check ; then run boot_recovery ; else run boot_ubi ; fi
 +bootconf=config-mt7986a-bananapi-bpi-r3-mini
 +bootdelay=0
-+bootfile=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-initramfs-recovery.itb
++bootfile=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-snand-initramfs-recovery.itb
 +bootfile_bl2=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-snand-preloader.bin
 +bootfile_fip=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-snand-bl31-uboot.fip
-+bootfile_upg=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-squashfs-sysupgrade.itb
++bootfile_upg=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-snand-squashfs-sysupgrade.itb
 +bootfile_en8811h_fw=EthMD32.bin
 +bootled_pwr=green:status
 +bootled_rec=blue:status
@@ -339,8 +339,8 @@
 +snand_write_bl2=mtd erase bl2 && mtd write bl2 $loadaddr 0x0 0x40000 && mtd write bl2 $loadaddr 0x40000 0x40000 && mtd write bl2 $loadaddr 0x80000 0x40000 && mtd write bl2 $loadaddr 0xc0000 0x40000
 +ubi_create_env=ubi check ubootenv || ubi create ubootenv 0x1f000 dynamic ; ubi check ubootenv2 || ubi create ubootenv2 0x1f000 dynamic
 +ubi_prepare_rootfs=if ubi check rootfs_data ; then else if env exists rootfs_data_max ; then ubi create rootfs_data $rootfs_data_max dynamic || ubi create rootfs_data - dynamic ; else ubi create rootfs_data - dynamic ; fi ; fi
-+ubi_read_production=ubi read $loadaddr fit && iminfo $loadaddr && run ubi_prepare_rootfs
-+ubi_read_recovery=ubi check recovery && ubi read $loadaddr recovery
++ubi_read_production=ubi read $loadaddr fit && iminfo $loadaddr && setenv filesize $filesize && run ubi_prepare_rootfs
++ubi_read_recovery=ubi check recovery && ubi read $loadaddr recovery && iminfo $loadaddr
 +ubi_read_emmc_install=ubi check emmc_install && ubi read $loadaddr emmc_install
 +ubi_remove_rootfs=ubi check rootfs_data && ubi remove rootfs_data
 +ubi_write_fip=run ubi_remove_rootfs ; ubi check fip && ubi remove fip ; ubi create fip 0x200000 static ; ubi write $loadaddr fip 0x200000
@@ -362,10 +362,10 @@
 +bootcmd=if pstore check ; then run boot_recovery ; else run boot_emmc ; fi
 +bootconf=config-mt7986a-bananapi-bpi-r3-mini
 +bootdelay=0
-+bootfile=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-initramfs-recovery.itb
++bootfile=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-initramfs-recovery.itb
 +bootfile_bl2=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-preloader.bin
 +bootfile_fip=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-bl31-uboot.fip
-+bootfile_upg=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-squashfs-sysupgrade.itb
++bootfile_upg=openwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-squashfs-sysupgrade.itb
 +bootfile_en8811h_fw=EthMD32.bin
 +bootled_pwr=green:status
 +bootled_rec=blue:status
@@ -406,7 +406,7 @@
 +emmc_read_recovery=part start mmc 0 $part_recovery part_addr && part size mmc 0 $part_recovery part_size && run mmc_read_vol
 +emmc_write_en8811h_fw=mmc partconf 0 1 2 2 && mmc erase 0x0 0x120 && mmc write $fileaddr 0x0 0x120 ; mmc partconf 0 1 1 0
 +emmc_write_bl2=mmc partconf 0 1 1 1 && mmc erase 0x0 0x400 && mmc write $fileaddr 0x0 0x400 ; mmc partconf 0 1 1 0
-+emmc_write_fip=mmc erase 0x3400 0x2000 && mmc write $fileaddr 0x3400 0x2000 && mmc erase 0x2000 0x800
++emmc_write_fip=mmc erase 0x3400 0x2C00 && mmc write $fileaddr 0x3400 0x2C00
 +emmc_write_production=part start mmc 0 $part_default part_addr && part size mmc 0 $part_default part_size && run mmc_write_vol
 +emmc_write_recovery=part start mmc 0 $part_recovery part_addr && part size mmc 0 $part_recovery part_size && run mmc_write_vol
 +_init_env=setenv _init_env ; setenv _create_env ; saveenv ; saveenv
@@ -426,8 +426,8 @@
 +/ {
 +	#address-cells = <1>;
 +	#size-cells = <1>;
-+	model = "Bananapi BPi-R3 Mini";
-+	compatible = "mediatek,mt7986", "mediatek,mt7986-rfb";
++	model = "BananaPi BPi-R3 mini";
++	compatible = "bananapi,bpi-r3-mini", "mediatek,mt7986a", "mediatek,mt7986", "mediatek,mt7986-rfb";
 +
 +	chosen {
 +		stdout-path = &uart0;

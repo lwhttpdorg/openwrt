@@ -1,0 +1,68 @@
+From: OpenWrt
+Date: Sat, 21 Mar 2026 00:00:00 +0000
+Subject: [PATCH] wifi: mt76: mt7915: add thermal zone sensor support
+
+Register mt7915 as a thermal zone sensor when #thermal-sensor-cells
+is present in the device tree. This allows DTS thermal zones to use
+WiFi temperature for fan control (e.g. wifi0-thermal, wifi1-thermal).
+
+Signed-off-by: OpenWrt
+---
+ mt7915/init.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/mt7915/init.c b/mt7915/init.c
+index 0000000..1111111 100644
+--- a/mt7915/init.c
++++ b/mt7915/init.c
+@@ -7,6 +7,7 @@
+#include <linux/etherdevice.h>
+#include <linux/module.h>
+#include <linux/hwmon.h>
+#include <linux/of.h>
++#include <linux/thermal.h>
+ #include "mt7915.h"
+ #include "mac.h"
+ #include "mcu.h"
+@@ -188,6 +189,28 @@ static const struct thermal_cooling_device_ops mt7915_thermal_ops = {
+ 	.set_cur_state = mt7915_thermal_set_cur_throttle_state,
+ };
+ 
++static int mt7915_thermal_get_temp(void *data, int *temp)
++{
++	struct mt7915_phy *phy = data;
++	int ret;
++
++	mutex_lock(&phy->dev->mt76.mutex);
++	ret = mt7915_mcu_get_temperature(phy);
++	mutex_unlock(&phy->dev->mt76.mutex);
++	if (ret < 0)
++		return ret;
++
++	*temp = ret * 1000; /* millidegree Celsius */
++	return 0;
++}
++
++static const struct thermal_zone_of_device_ops mt7915_tz_ops = {
++	.get_temp = mt7915_thermal_get_temp,
++};
++
+ static void mt7915_unregister_thermal(struct mt7915_phy *phy)
+ {
+ 	struct thermal_cooling_device *cdev = phy->cdev;
+@@ -216,6 +239,18 @@ static int mt7915_thermal_init(struct mt7915_phy *phy)
+ 	if (!IS_REACHABLE(CONFIG_HWMON))
+ 		return 0;
+ 
++	if (IS_REACHABLE(CONFIG_THERMAL_OF) &&
++	    of_find_property(wiphy->dev.of_node, "#thermal-sensor-cells", NULL)) {
++		devm_thermal_of_zone_register(&wiphy->dev,
++					     phy->mt76->band_idx,
++					     phy,
++					     &mt7915_tz_ops);
++		/* Ignore errors - thermal zone may not be in DTS */
++	}
++
+ 	hwmon = devm_hwmon_device_register_with_groups(&wiphy->dev, name, phy,
+ 						       mt7915_hwmon_groups);
+ 	return PTR_ERR_OR_ZERO(hwmon);
