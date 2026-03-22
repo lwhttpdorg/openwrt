@@ -1,0 +1,47 @@
+# Grow ext4 root/overlay backing device to fill its partition on first boot.
+# Requires: CONFIG_PACKAGE_resize2fs=y
+# Build: set CONFIG_TARGET_ROOTFS_PARTSIZE smaller than the p2 size in your disk
+# image (e.g. 512–1024 MiB) so the flashed ext4 is smaller than the partition;
+# resize2fs then expands to the partition end. If the partition itself does not
+# span the disk yet, fix the partition table (or growpart/sfdisk) first.
+
+grow_ext4_once() {
+	local dev src
+
+	src="$(awk '$2=="/"{print $1}' /proc/mounts)"
+	case "$src" in
+		overlay)
+			dev="$(awk '$2=="/overlay"{print $1}' /proc/mounts)"
+			;;
+		/dev/*)
+			dev="$src"
+			;;
+		*)
+			return 0
+			;;
+	esac
+
+	case "$dev" in
+		/dev/mmcblk*p[0-9]*|/dev/sd*[0-9]*)
+			dev="$(readlink -f "$dev")"
+			;;
+		*)
+			return 0
+			;;
+	esac
+
+	command -v resize2fs >/dev/null || {
+		logger -t ext4-root-grow "resize2fs not installed; enable CONFIG_PACKAGE_resize2fs"
+		return 0
+	}
+
+	case "$(blkid -o value -s TYPE "$dev" 2>/dev/null)" in
+		ext4) ;;
+		*) return 0 ;;
+	esac
+
+	logger -t ext4-root-grow "resizing $dev"
+	resize2fs -f "$dev" 2>&1 | logger -t ext4-root-grow
+}
+
+grow_ext4_once
