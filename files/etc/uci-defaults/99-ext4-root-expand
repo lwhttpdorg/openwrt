@@ -1,0 +1,131 @@
+# First boot: extend root partition to end of disk (if free space), then resize2fs.
+#
+# Sourced by /etc/init.d/boot uci_apply_defaults (see package/base-files). Runs once;
+# file is removed after success. Check: logread | grep ext4-root-expand
+#
+# Build deps (menuconfig):
+#   CONFIG_PACKAGE_resize2fs=y
+#   CONFIG_PACKAGE_sfdisk=y
+#   CONFIG_PACKAGE_blockdev=y   (optional; helps kernel see new PT without reboot)
+#
+# Image: small CONFIG_TARGET_ROOTFS_PARTSIZE vs large p2 in partition table is OK;
+# this script grows the partition when there is unallocated space after p2.
+
+logger -t ext4-root-expand "uci-defaults: start (root src=$(awk '$2=="/"{print $1; exit}' /proc/mounts 2>/dev/null))"
+
+expand_ext4_root_once() {
+    local dev src disk part dname sys pstart psize dsize lastp lastd
+
+    src="$(awk '$2=="/"{print $1}' /proc/mounts)"
+    case "$src" in
+        overlay)
+            dev="$(awk '$2=="/overlay"{print $1}' /proc/mounts)"
+            ;;
+        /dev/*)
+            dev="$src"
+            ;;
+        *)
+            logger -t ext4-root-expand "skip: root fs is not overlay or /dev/* (src=$src)"
+            return 0
+            ;;
+    esac
+
+    [ -n "$dev" ] || {
+        logger -t ext4-root-expand "skip: empty root block dev"
+        return 0
+    }
+    dev="$(readlink -f "$dev")"
+    [ -b "$dev" ] || {
+        logger -t ext4-root-expand "skip: not a block device after readlink ($dev)"
+        return 0
+    }
+
+    case "$dev" in
+        /dev/loop*)
+            logger -t ext4-root-expand "skip: loop device $dev"
+            return 0
+            ;;
+    esac
+
+    command -v resize2fs >/dev/null || {
+        logger -t ext4-root-expand "resize2fs missing; enable CONFIG_PACKAGE_resize2fs"
+        return 0
+    }
+
+    awk -v d="$dev" '$1==d && $3=="ext4"{exit 0} END{exit 1}' /proc/mounts || {
+        logger -t ext4-root-expand "skip: root/overlay upper is not ext4 ($dev)"
+        return 0
+    }
+
+    dname=$(basename "$dev")
+    disk=
+    part=
+    case "$dname" in
+        mmcblk*p*|nvme*n*p*)
+            part="${dname##*p}"
+            disk="${dname%p${part}}"
+            disk="/dev/$disk"
+            ;;
+        sd[a-z]*|vd[a-z]*)
+            disk="/dev/${dname%%[0-9]*}"
+            part="${dname#"${dname%%[0-9]*}"}"
+            ;;
+        *)
+            logger -t ext4-root-expand "unsupported device $dev (need mmcblk/nvme/sd/vd style name)"
+            return 0
+            ;;
+    esac
+
+    [ -n "$part" ] && [ -b "$disk" ] || {
+        logger -t ext4-root-expand "skip: bad disk/part (disk=$disk part=$part)"
+        return 0
+    }
+
+    sys="/sys/block/$(basename "$disk")/$(basename "$dev")"
+    pstart=$(cat "$sys/start" 2>/dev/null) || {
+        logger -t ext4-root-expand "skip: no $sys/start"
+        return 0
+    }
+    psize=$(cat "$sys/size" 2>/dev/null) || {
+        logger -t ext4-root-expand "skip: no $sys/size"
+        return 0
+    }
+    dsize=$(cat "/sys/block/$(basename "$disk")/size" 2>/dev/null) || {
+        logger -t ext4-root-expand "skip: no disk size in sysfs"
+        return 0
+    }
+
+    lastp=$((pstart + psize - 1))
+    lastd=$((dsize - 1))
+
+    if [ "$lastp" -lt "$lastd" ]; then
+        if ! command -v sfdisk >/dev/null; then
+            logger -t ext4-root-expand "free space after partition but sfdisk missing; enable CONFIG_PACKAGE_sfdisk"
+        else
+            logger -t ext4-root-expand "growing partition $part on $disk (disk end $lastd, part end $lastp)"
+            out="$(echo ',+' | sfdisk -N "$part" "$disk" --no-reread 2>&1)"
+            rc=$?
+            logger -t ext4-root-expand "$out"
+            [ "$rc" -eq 0 ] || logger -t ext4-root-expand "sfdisk exit $rc"
+            if command -v blockdev >/dev/null; then
+                out="$(blockdev --rereadpt "$disk" 2>&1)"
+                rc=$?
+                [ -n "$out" ] && logger -t ext4-root-expand "$out"
+                [ "$rc" -eq 0 ] || logger -t ext4-root-expand "blockdev --rereadpt exit $rc"
+            else
+                logger -t ext4-root-expand "blockdev missing; enable CONFIG_PACKAGE_blockdev or reboot if resize2fs sees old size"
+            fi
+        fi
+    else
+        logger -t ext4-root-expand "partition already to disk end; only resizing fs if needed"
+    fi
+
+    logger -t ext4-root-expand "resize2fs $dev"
+    out="$(resize2fs -f "$dev" 2>&1)"
+    rc=$?
+    logger -t ext4-root-expand "$out"
+    [ "$rc" -eq 0 ] || logger -t ext4-root-expand "resize2fs exit $rc"
+    logger -t ext4-root-expand "uci-defaults: finished"
+}
+
+expand_ext4_root_once
