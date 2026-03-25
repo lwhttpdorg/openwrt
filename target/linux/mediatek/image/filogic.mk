@@ -425,6 +425,7 @@ TARGET_DEVICES += bananapi_bpi-r3
 define Device/bananapi_bpi-r3-mini-common
   DEVICE_VENDOR := Bananapi
   DEVICE_MODEL := BPi-R3 mini
+  SUPPORTED_DEVICES := bananapi,bpi-r3-mini
   DEVICE_DTS := mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_CONFIG := config-mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_DIR := ../dts
