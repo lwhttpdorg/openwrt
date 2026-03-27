@@ -1,77 +1,106 @@
 // SPDX-License-Identifier: (GPL-2.0 OR MIT)
 /*
  * Copyright (C) 2021 MediaTek Inc.
- * Authors: Frank Wunderlich <frank-w@public-files.de>
- *          Eric Woudstra <ericwouds@gmail.com>
- *          Tianling Shen <cnsztl@immortalwrt.org>
+ * Authors: Sam.Shih <sam.shih@mediatek.com>
+ *          Frank Wunderlich <frank-w@public-files.de>
+ *          Daniel Golle <daniel@makrotopia.org>
  */
 
 /dts-v1/;
-
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/leds/common.h>
-#include <dt-bindings/pinctrl/mt65xx.h>
 
 #include "mt7986a.dtsi"
 
 / {
-	model = "Bananapi BPI-R3 Mini";
+	model = "BananaPi BPi-R3 mini";
 	chassis-type = "embedded";
-	compatible = "bananapi,bpi-r3mini", "mediatek,mt7986a";
+	compatible = "bananapi,bpi-r3-mini", "mediatek,mt7986a";
 
 	aliases {
-		serial0 = &uart0;
 		ethernet0 = &gmac0;
 		ethernet1 = &gmac1;
+		serial0 = &uart0;
+
+		led-boot = &status_led;
+		led-failsafe = &status_led;
+		led-running = &status_led;
+		led-upgrade = &status_led;
 	};
 
 	chosen {
 		stdout-path = "serial0:115200n8";
+		rootdisk-emmc = <&emmc_rootdisk>;
+		rootdisk-spim-nand = <&nand_rootdisk>;
 	};
 
-	dcin: regulator-12v {
+	memory {
+		reg = <0 0x40000000 0 0x80000000>;
+	};
+
+	gpio-keys {
+		compatible = "gpio-keys";
+
+		button-reset {
+			label = "reset";
+			linux,code = <KEY_RESTART>;
+			gpios = <&pio 7 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	gpio-leds {
+		compatible = "gpio-leds";
+
+		status_led: led-0 {
+			function = LED_FUNCTION_STATUS;
+			color = <LED_COLOR_ID_GREEN>;
+			gpios = <&pio 19 GPIO_ACTIVE_HIGH>;
+		};
+
+		led-1 {
+			function = LED_FUNCTION_WLAN;
+			color = <LED_COLOR_ID_BLUE>;
+			function-enumerator = <1>;
+			gpios = <&pio 1 GPIO_ACTIVE_HIGH>;
+		};
+
+		led-2 {
+			function = LED_FUNCTION_WLAN;
+			color = <LED_COLOR_ID_BLUE>;
+			function-enumerator = <2>;
+			gpios = <&pio 2 GPIO_ACTIVE_HIGH>;
+		};
+	};
+
+	reg_1p8v: regulator-1p8v {
 		compatible = "regulator-fixed";
-		regulator-name = "12vd";
-		regulator-min-microvolt = <12000000>;
-		regulator-max-microvolt = <12000000>;
-		regulator-boot-on;
-		regulator-always-on;
-	};
-
-	fan: pwm-fan {
-		compatible = "pwm-fan";
-		#cooling-cells = <2>;
-		/*
-		 * The signal is inverted on this board and the PWM driver
-		 * does not support polarity inversion.
-		 */
-		/* cooling level (0, 1, 2) */
-		cooling-levels = <255 96 0>;
-		pwms = <&pwm 0 10000>;
-	};
-
-	reg_1p8v: regulator-1v8 {
-		compatible = "regulator-fixed";
-		regulator-name = "1.8vd";
+		regulator-name = "fixed-1.8V";
 		regulator-min-microvolt = <1800000>;
 		regulator-max-microvolt = <1800000>;
 		regulator-boot-on;
 		regulator-always-on;
-		vin-supply = <&dcin>;
 	};
 
-	reg_3p3v: regulator-3v3 {
+	reg_3p3v: regulator-3p3v {
 		compatible = "regulator-fixed";
-		regulator-name = "3.3vd";
+		regulator-name = "fixed-3.3V";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		regulator-boot-on;
 		regulator-always-on;
-		vin-supply = <&dcin>;
 	};
 
-	usb_vbus: regulator-5v {
+	reg_5v: regulator-5v {
+		compatible = "regulator-fixed";
+		regulator-name = "fixed-5V";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		regulator-boot-on;
+		regulator-always-on;
+	};
+
+	usb_vbus: regulator-usb-vbus {
 		compatible = "regulator-fixed";
 		regulator-name = "usb_vbus";
 		regulator-min-microvolt = <5000000>;
@@ -79,238 +108,10 @@
 		gpios = <&pio 20 GPIO_ACTIVE_LOW>;
 		regulator-boot-on;
 	};
-
-	en8811_a: regulator-phy1 {
-		compatible = "regulator-fixed";
-		regulator-name = "phy1";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		gpio = <&pio 16 GPIO_ACTIVE_LOW>;
-		regulator-always-on;
-	};
-
-	en8811_b: regulator-phy2 {
-		compatible = "regulator-fixed";
-		regulator-name = "phy2";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		gpio = <&pio 17 GPIO_ACTIVE_LOW>;
-		regulator-always-on;
-	};
-
-	leds {
-		compatible = "gpio-leds";
-
-		green_led: led-0 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_POWER;
-			gpios = <&pio 19 GPIO_ACTIVE_HIGH>;
-			default-state = "on";
-		};
-	};
-
-	gpio-keys {
-		compatible = "gpio-keys";
-
-		reset-key {
-			label = "reset";
-			linux,code = <KEY_RESTART>;
-			gpios = <&pio 7 GPIO_ACTIVE_LOW>;
-		};
-	};
-
 };
 
-/* WiFi thermal zones - from start-pwmfan.sh wifi_temp_set (70,65,60,55,50,45,40°C) */
-thermal-zones {
-	wifi0-thermal {
-		polling-delay-passive = <1000>;
-		polling-delay = <1000>;
-		thermal-sensors = <&wifi 0>;
-
-		trips {
-			wifi0_trip_silent: active-silent {
-				temperature = <40000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi0_trip_low: active-low {
-				temperature = <45000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi0_trip_med_low: active-med-low {
-				temperature = <50000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi0_trip_med: active-med {
-				temperature = <55000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi0_trip_med_high: active-med-high {
-				temperature = <60000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi0_trip_high: active-high {
-				temperature = <65000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi0_trip_hot: active-hot {
-				temperature = <70000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-		};
-
-		cooling-maps {
-			wifi0-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi0_trip_silent>; };
-			wifi0-active-low { cooling-device = <&fan 1 1>; trip = <&wifi0_trip_low>; };
-			wifi0-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi0_trip_med_low>; };
-			wifi0-active-med { cooling-device = <&fan 3 3>; trip = <&wifi0_trip_med>; };
-			wifi0-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi0_trip_med_high>; };
-			wifi0-active-high { cooling-device = <&fan 5 5>; trip = <&wifi0_trip_high>; };
-			wifi0-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi0_trip_hot>; };
-		};
-	};
-
-	wifi1-thermal {
-		polling-delay-passive = <1000>;
-		polling-delay = <1000>;
-		thermal-sensors = <&wifi 1>;
-
-		trips {
-			wifi1_trip_silent: active-silent {
-				temperature = <40000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi1_trip_low: active-low {
-				temperature = <45000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi1_trip_med_low: active-med-low {
-				temperature = <50000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi1_trip_med: active-med {
-				temperature = <55000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi1_trip_med_high: active-med-high {
-				temperature = <60000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi1_trip_high: active-high {
-				temperature = <65000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-			wifi1_trip_hot: active-hot {
-				temperature = <70000>;
-				hysteresis = <2000>;
-				type = "active";
-			};
-		};
-
-		cooling-maps {
-			wifi1-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi1_trip_silent>; };
-			wifi1-active-low { cooling-device = <&fan 1 1>; trip = <&wifi1_trip_low>; };
-			wifi1-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi1_trip_med_low>; };
-			wifi1-active-med { cooling-device = <&fan 3 3>; trip = <&wifi1_trip_med>; };
-			wifi1-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi1_trip_med_high>; };
-			wifi1-active-high { cooling-device = <&fan 5 5>; trip = <&wifi1_trip_high>; };
-			wifi1-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi1_trip_hot>; };
-		};
-	};
-};
-
-&cpu_thermal {
-	trips {
-		cpu_trip_crit: crit {
-			temperature = <125000>;
-			hysteresis = <2000>;
-			type = "critical";
-		};
-		cpu_trip_hot: hot {
-			temperature = <120000>;
-			hysteresis = <2000>;
-			type = "hot";
-		};
-		cpu_trip_active_silent: active-silent {
-			temperature = <30000>;
-			hysteresis = <2000>;
-			type = "active";
-		};
-		cpu_trip_active_low: active-low {
-			temperature = <35000>;
-			hysteresis = <2000>;
-			type = "active";
-		};
-		cpu_trip_active_med_low: active-med-low {
-			temperature = <40000>;
-			hysteresis = <2000>;
-			type = "active";
-		};
-		cpu_trip_active_med: active-med {
-			temperature = <45000>;
-			hysteresis = <2000>;
-			type = "active";
-		};
-		cpu_trip_active_med_high: active-med-high {
-			temperature = <50000>;
-			hysteresis = <2000>;
-			type = "active";
-		};
-		cpu_trip_active_high: active-high {
-			temperature = <55000>;
-			hysteresis = <2000>;
-			type = "active";
-		};
-		cpu_trip_active_hot: active-hot {
-			temperature = <60000>;
-			hysteresis = <2000>;
-			type = "active";
-		};
-	};
-
-	cooling-maps {
-		cpu-active-silent {
-			cooling-device = <&fan 0 0>;
-			trip = <&cpu_trip_active_silent>;
-		};
-		cpu-active-low {
-			cooling-device = <&fan 1 1>;
-			trip = <&cpu_trip_active_low>;
-		};
-		cpu-active-med-low {
-			cooling-device = <&fan 2 2>;
-			trip = <&cpu_trip_active_med_low>;
-		};
-		cpu-active-med {
-			cooling-device = <&fan 3 3>;
-			trip = <&cpu_trip_active_med>;
-		};
-		cpu-active-med-high {
-			cooling-device = <&fan 4 4>;
-			trip = <&cpu_trip_active_med_high>;
-		};
-		cpu-active-high {
-			cooling-device = <&fan 5 5>;
-			trip = <&cpu_trip_active_high>;
-		};
-		cpu-active-hot {
-			cooling-device = <&fan 6 6>;
-			trip = <&cpu_trip_active_hot>;
-		};
-	};
+&auxadc {
+	status = "okay";
 };
 
 &crypto {
@@ -319,35 +120,111 @@ thermal-zones {
 
 &eth {
 	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&eth_pins>;
 
 	gmac0: mac@0 {
 		compatible = "mediatek,eth-mac";
 		reg = <0>;
+		phy-handle = <&phy14>;
 		phy-mode = "2500base-x";
-		phy-handle = <&phy0>;
 	};
 
 	gmac1: mac@1 {
 		compatible = "mediatek,eth-mac";
 		reg = <1>;
+		phy-handle = <&phy15>;
 		phy-mode = "2500base-x";
-		phy-handle = <&phy1>;
 	};
 
 	mdio: mdio-bus {
 		#address-cells = <1>;
 		#size-cells = <0>;
+
+		phy14: phy@e {
+			/* EN8811H PHY ID */
+			compatible = "ethernet-phy-id03a2.a411";
+			/* PHY Address */
+			reg = <14>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&en8811_pwr_a>;
+
+			airoha,pnswap-rx;
+
+			interrupt-parent = <&pio>;
+			interrupts = <48 IRQ_TYPE_EDGE_FALLING>;
+			reset-gpios = <&pio 49 GPIO_ACTIVE_LOW>;
+			reset-assert-us = <10000>;
+			reset-deassert-us = <20000>;
+
+			phy-mode = "2500base-x";
+			full-duplex;
+			pause;
+
+			leds {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				led@0 {
+					reg = <0>;
+					function = LED_FUNCTION_LAN;
+					color = <LED_COLOR_ID_YELLOW>;
+				};
+
+				led@1 {
+					reg = <1>;
+					function = LED_FUNCTION_LAN;
+					color = <LED_COLOR_ID_GREEN>;
+				};
+			};
+		};
+
+		phy15: phy@f {
+			/* EN8811H PHY ID */
+			compatible = "ethernet-phy-id03a2.a411";
+			/* PHY Address */
+			reg = <15>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&en8811_pwr_b>;
+
+			airoha,pnswap-rx;
+
+			interrupt-parent = <&pio>;
+			interrupts = <46 IRQ_TYPE_EDGE_FALLING>;
+			reset-gpios = <&pio 47 GPIO_ACTIVE_LOW>;
+			reset-assert-us = <10000>;
+			reset-deassert-us = <20000>;
+
+			phy-mode = "2500base-x";
+			full-duplex;
+			pause;
+
+			leds {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				led@0 {
+					reg = <0>;
+					function = LED_FUNCTION_WAN;
+					color = <LED_COLOR_ID_YELLOW>;
+				};
+
+				led@1 {
+					reg = <1>;
+					function = LED_FUNCTION_WAN;
+					color = <LED_COLOR_ID_GREEN>;
+				};
+			};
+		};
 	};
 };
 
-&mmc0 {
-	pinctrl-names = "default", "state_uhs";
-	pinctrl-0 = <&mmc0_pins_default>;
-	pinctrl-1 = <&mmc0_pins_uhs>;
-	vmmc-supply = <&reg_3p3v>;
-	vqmmc-supply = <&reg_1p8v>;
+&hnat {
+	mtketh-wan = "eth1";
+	mtketh-lan = "eth0";
+	mtketh-max-gmac = <2>;
+	status = "okay";
 };
-
 
 &i2c0 {
 	pinctrl-names = "default";
@@ -358,74 +235,43 @@ thermal-zones {
 	eeprom@50 {
 		compatible = "atmel,24c02";
 		reg = <0x50>;
-
-		address-width = <8>;
 		pagesize = <8>;
 		size = <256>;
 	};
+
+	wm8960: wm8960@1a {
+		compatible = "wlf,wm8960";
+		reg = <0x1a>;
+	};
 };
 
-&mdio {
-	phy0: ethernet-phy@14 {
-		reg = <14>;
-		interrupts-extended = <&pio 48 IRQ_TYPE_EDGE_FALLING>;
-		reset-gpios = <&pio 49 GPIO_ACTIVE_LOW>;
-		reset-assert-us = <10000>;
-		reset-deassert-us = <20000>;
-		phy-mode = "2500base-x";
-		full-duplex;
-		pause;
-		airoha,pnswap-rx;
+&mmc0 {
+	pinctrl-names = "default", "state_uhs";
+	pinctrl-0 = <&mmc0_pins_default>;
+	pinctrl-1 = <&mmc0_pins_uhs>;
+	bus-width = <8>;
+	max-frequency = <200000000>;
+	cap-mmc-highspeed;
+	mmc-hs200-1_8v;
+	mmc-hs400-1_8v;
+	hs400-ds-delay = <0x14014>;
+	vmmc-supply = <&reg_3p3v>;
+	vqmmc-supply = <&reg_1p8v>;
+	non-removable;
+	no-sd;
+	no-sdio;
+	status = "okay";
 
-		leds {
-			#address-cells = <1>;
-			#size-cells = <0>;
+	card@0 {
+		compatible = "mmc-card";
+		reg = <0>;
 
-			led@0 { /* en8811_a_gpio5 */
-				reg = <0>;
-				color = <LED_COLOR_ID_YELLOW>;
-				function = LED_FUNCTION_LAN;
-				function-enumerator = <1>;
-				default-state = "keep";
-			};
-			led@1 { /* en8811_a_gpio4 */
-				reg = <1>;
-				color = <LED_COLOR_ID_GREEN>;
-				function = LED_FUNCTION_LAN;
-				function-enumerator = <2>;
-				default-state = "keep";
-			};
-		};
-	};
-
-	phy1: ethernet-phy@15 {
-		reg = <15>;
-		interrupts-extended = <&pio 46 IRQ_TYPE_EDGE_FALLING>;
-		reset-gpios = <&pio 47 GPIO_ACTIVE_LOW>;
-		reset-assert-us = <10000>;
-		reset-deassert-us = <20000>;
-		phy-mode = "2500base-x";
-		full-duplex;
-		pause;
-		airoha,pnswap-rx;
-
-		leds {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			led@0 { /* en8811_b_gpio5 */
-				reg = <0>;
-				color = <LED_COLOR_ID_YELLOW>;
-				function = LED_FUNCTION_WAN;
-				function-enumerator = <1>;
-				default-state = "keep";
-			};
-			led@1 { /* en8811_b_gpio4 */
-				reg = <1>;
-				color = <LED_COLOR_ID_GREEN>;
-				function = LED_FUNCTION_WAN;
-				function-enumerator = <2>;
-				default-state = "keep";
+		block {
+			compatible = "block-device";
+			partitions {
+				emmc_rootdisk: block-partition-production {
+					partname = "production";
+				};
 			};
 		};
 	};
@@ -442,6 +288,27 @@ thermal-zones {
 };
 
 &pio {
+	en8811_pwr_a: en8811-pwr-a {
+		pins = "GPIO_11";
+		drive-strength = <8>;
+		mediatek,pull-down-adv = <1>;
+		output-low;
+	};
+
+	en8811_pwr_b: en8811-pwr-b {
+		pins = "GPIO_12";
+		drive-strength = <8>;
+		mediatek,pull-down-adv = <1>;
+		output-low;
+	};
+
+	eth_pins: eth-pins {
+		mux {
+			function = "eth";
+			groups = "mdc_mdio";
+		};
+	};
+
 	i2c_pins: i2c-pins {
 		mux {
 			function = "i2c";
@@ -449,7 +316,7 @@ thermal-zones {
 		};
 	};
 
-	mmc0_pins_default: mmc0-pins {
+	mmc0_pins_default: mmc0-pins-default {
 		mux {
 			function = "emmc";
 			groups = "emmc_51";
@@ -460,21 +327,21 @@ thermal-zones {
 			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
 			input-enable;
 			drive-strength = <4>;
-			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
+			mediatek,pull-up-adv = <1>;
 		};
 		conf-clk {
 			pins = "EMMC_CK";
 			drive-strength = <6>;
-			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
+			mediatek,pull-down-adv = <2>;
 		};
 		conf-ds {
 			pins = "EMMC_DSL";
-			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
+			mediatek,pull-down-adv = <2>;
 		};
 		conf-rst {
 			pins = "EMMC_RSTB";
 			drive-strength = <4>;
-			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
+			mediatek,pull-up-adv = <1>;
 		};
 	};
 
@@ -489,21 +356,21 @@ thermal-zones {
 			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
 			input-enable;
 			drive-strength = <4>;
-			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
+			mediatek,pull-up-adv = <1>;
 		};
 		conf-clk {
 			pins = "EMMC_CK";
 			drive-strength = <6>;
-			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
+			mediatek,pull-down-adv = <2>;
 		};
 		conf-ds {
 			pins = "EMMC_DSL";
-			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
+			mediatek,pull-down-adv = <2>;
 		};
 		conf-rst {
 			pins = "EMMC_RSTB";
 			drive-strength = <4>;
-			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
+			mediatek,pull-up-adv = <1>;
 		};
 	};
 
@@ -517,7 +384,7 @@ thermal-zones {
 	pwm_pins: pwm-pins {
 		mux {
 			function = "pwm";
-			groups = "pwm0";
+			groups = "pwm0", "pwm1_0";
 		};
 	};
 
@@ -526,35 +393,66 @@ thermal-zones {
 			function = "spi";
 			groups = "spi0", "spi0_wp_hold";
 		};
+		conf-pu {
+			pins = "SPI2_CS", "SPI2_HOLD", "SPI2_WP";
+			drive-strength = <8>;
+			mediatek,pull-up-adv = <0>;
+		};
+		conf-pd {
+			pins = "SPI2_CLK", "SPI2_MOSI", "SPI2_MISO";
+			drive-strength = <8>;
+			mediatek,pull-down-adv = <0>;
+		};
+	};
+
+	spic_pins: spic-pins {
+		mux {
+			function = "spi";
+			groups = "spi1_2";
+		};
+	};
+
+	uart1_pins: uart1-pins {
+		mux {
+			function = "uart";
+			groups = "uart1";
+		};
+	};
+
+	uart2_pins: uart2-pins {
+		mux {
+			function = "uart";
+			groups = "uart2";
+		};
 	};
 
 	usb_ngff_pins: usb-ngff-pins {
-		ngff-gnss-off-conf {
+		ngff-gnss-off {
 			pins = "GPIO_6";
 			drive-strength = <8>;
 			mediatek,pull-up-adv = <1>;
 		};
-		ngff-pe-rst-conf {
+		ngff-pe-rst {
 			pins = "GPIO_7";
 			drive-strength = <8>;
 			mediatek,pull-up-adv = <1>;
 		};
-		ngff-wwan-off-conf {
+		ngff-wwan-off {
 			pins = "GPIO_8";
 			drive-strength = <8>;
 			mediatek,pull-up-adv = <1>;
 		};
-		ngff-pwr-off-conf {
+		ngff-pwr-off {
 			pins = "GPIO_9";
 			drive-strength = <8>;
 			mediatek,pull-up-adv = <1>;
 		};
-		ngff-rst-conf {
+		ngff-rst {
 			pins = "GPIO_10";
 			drive-strength = <8>;
 			mediatek,pull-up-adv = <1>;
 		};
-		ngff-coex-conf {
+		ngff-coex {
 			pins = "SPI1_CS";
 			drive-strength = <8>;
 			mediatek,pull-up-adv = <1>;
@@ -594,13 +492,6 @@ thermal-zones {
 			drive-strength = <4>;
 		};
 	};
-
-	wf_led_pins: wf-led-pins {
-		mux {
-			function = "led";
-			groups = "wifi_led";
-		};
-	};
 };
 
 &pwm {
@@ -623,7 +514,38 @@ thermal-zones {
 		spi-max-frequency = <20000000>;
 		spi-tx-bus-width = <4>;
 		spi-rx-bus-width = <4>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "bl2";
+				reg = <0x0 0x200000>;
+				read-only;
+			};
+
+			partition@200000 {
+				label = "ubi";
+				reg = <0x200000 0x7e00000>;
+				compatible = "linux,ubi";
+
+				volumes {
+					nand_rootdisk: ubi-volume-fit {
+						volname = "fit";
+					};
+				};
+			};
+		};
 	};
+};
+
+&spi1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&spic_pins>;
+	/* conflicts with M.2 pin */
+	status = "disabled";
 };
 
 &ssusb {
@@ -642,8 +564,20 @@ thermal-zones {
 	status = "okay";
 };
 
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pins>;
+	status = "okay";
+};
+
 &usb_phy {
 	status = "okay";
+};
+
+&uart2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins>;
+	status = "disabled";
 };
 
 &watchdog {
@@ -651,14 +585,137 @@ thermal-zones {
 };
 
 &wifi {
-	#thermal-sensor-cells = <1>;
-	status = "okay";
 	pinctrl-names = "default", "dbdc";
-	pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;
-	pinctrl-1 = <&wf_dbdc_pins>, <&wf_led_pins>;
+	pinctrl-0 = <&wf_2g_5g_pins>;
+	pinctrl-1 = <&wf_dbdc_pins>;
+	status = "okay";
 
-	led {
-		led-active-low;
-	};
+	mediatek,eeprom-data = <0x86790200 0x000c4326 0x60000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x125b486c 0x00280000 0x05d00000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x0c000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000012 0x12120000 0x00000000 0x00000000 0x00002222 0x22223333 0x33333333
+				0x33333333 0x33333333 0x33333333 0x33333333 0x33333333 0x33330000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00292929 0x29282828 0x28282828 0x28282828 0x28282828 0x28282828 0x28000000 0x00000000
+				0x00000000 0x00242424 0x24222222 0x22242424 0x24222222 0x22242424 0x24222222 0x22242424
+				0x24222222 0x22000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x007f7f7f 0xd1d1dddd 0xe9e9f5f5 0x01010909 0x1515d1d1 0xdddde9e9 0xf5f5fdfd
+				0x09091515 0xd1d1dddd 0xe9e9f5f5 0xfdfd0909 0x1515d1d1 0xdddde9e9 0xf5f5fdfd 0x09091515
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x0efefc00 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x021e021e 0x02000200 0x02370237 0x02370237
+				0x02370237 0x02370237 0x02370237 0x02370237 0x02370237 0x02370237 0x02370237 0x02370237
+				0x02370237 0x02370237 0x02370237 0x02370237 0x002200c6 0xc6c4c4c3 0x0000c1c2 0xc1838383
+				0x838686c1 0xc1838383 0x838686c2 0xc1c18181 0x82838585 0x8686c1c1 0x81818283 0x85858686
+				0xc1c18181 0x82838585 0x8686c1c1 0x81818283 0x85858686 0xc1c18181 0x82838585 0x8686c5c5
+				0xc3c100c2 0xc3c2c200 0x81828383 0xc2c2c200 0x81828383 0xc3c1c1c1 0x81828384 0x84c2c2c2
+				0xc2008182 0x83838585 0xc2c2c200 0x81828383 0x8585c1c1 0xc1818283 0x84848686 0x82828484
+				0x85868787 0x8989c2c2 0xc2008182 0x83838585 0xc2c2c200 0x81828383 0x8585c2c2 0xc2008182
+				0x83838585 0xc4c4c2c1 0x00c3c3c3 0xc1008183 0x838686c3 0xc3c3c100 0x81838386 0x86c2c2c2
+				0x00818284 0x84868682 0x82828485 0x8688888b 0x8bc3c3c3 0xc1008183 0x838686c3 0xc3c3c100
+				0x81838386 0x86c3c3c3 0xc1008183 0x83868600 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00bd0000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00c50000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00495256 0x55555555 0x004a5251 0x51515151 0x004a5355 0x56565656 0x0049504e 0x51515151
+				0x00495150 0x54545454 0x00495051 0x51515151 0x00495251 0x50505050 0x00495251 0x51515151
+				0x00495251 0x54545454 0x00495150 0x54545454 0x00495352 0x51515151 0x00495353 0x52525252
+				0x00495150 0x50505050 0x00495152 0x54545454 0x00495251 0x53535353 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0xd1d1dddd 0xe9e9f5f5 0xfdfd1414 0x1d1d0000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x85840000 0xc3c4c382 0x828281c1 0xc4c5c400 0x0000c1c3 0xc4c4c481 0x8181c1c2 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0xc0bbc0bb 0xc0bbc0bb 0x40c5c0c4 0xc0c3c0c3 0x40c340c5 0x40c4c0c3 0x40c3c0c2 0xc0c5c0c4
+				0x40c440c4 0xc0c3c0c5 0xc0c440c4 0x40c4c0c3 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6
+				0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6 0x40c640c6
+				0x40c640c6 0x40c640c6 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000
+				0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000 0x00000000>;
 };
-
