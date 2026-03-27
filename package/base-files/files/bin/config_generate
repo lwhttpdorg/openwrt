@@ -317,7 +317,7 @@ generate_static_system() {
 		set system.@system[-1].ttylogin='0'
 		set system.@system[-1].log_size='4'
 		set system.@system[-1].urandom_seed='0'
-				set system.@system[-1].conloglevel='4'
+		set system.@system[-1].conloglevel='4'
 		set system.@system[-1].cronloglevel='9'
 
 		delete system.ntp

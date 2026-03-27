@@ -1,25 +1,19 @@
 #!/bin/sh
+# Generate DTS patches from linux-main base (6.12 kernel)
+# Requires in openwrt root: mt7986a-a.dtsi, mt7986a-b.dtsi, mt7986a-bananapi-bpi-r3-mini-a.dts, mt7986a-bananapi-bpi-r3-mini-b.dts
 
-# make diff of mt7986a.dtsi
-# diff -u target/linux/mediatek/files-6.6/arch/arm64/boot/dts/mediatek/mt7986a.dtsi ./mt7986a.dtsi > ./mt7986a-dtsi.patch
-diff -u mt7986a-a.dtsi ./mt7986a-b.dtsi > ./mt7986a-dtsi.patch
-# replace diff head
-sed -i '1,2d' ./mt7986a-dtsi.patch
-sed -i '1i --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi' ./mt7986a-dtsi.patch
-sed -i '1a +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi' ./mt7986a-dtsi.patch
+# 998: hnat node in mt7986a.dtsi (dtsi first, board dts includes it)
+diff -u mt7986a-a.dtsi mt7986a-b.dtsi > mt7986a-dtsi.patch
+sed -i '1,2d' mt7986a-dtsi.patch
+sed -i '1i --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi' mt7986a-dtsi.patch
+sed -i '1a +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi' mt7986a-dtsi.patch
+cp mt7986a-dtsi.patch target/linux/mediatek/patches-6.6/998-arm64-dts-mediatek-mt7986a-add-hnat-node.patch
+rm mt7986a-dtsi.patch
 
-diff -u target/linux/mediatek/dts/mt7986a-bananapi-bpi-r3-mini.dts mt7986a-bananapi-bpi-r3-mini.dts > ./bpi-r3-mini-dts.patch
-# replace diff head
-sed -i '1,2d' ./bpi-r3-mini-dts.patch
-sed -i '1i --- a/arch/arm/dts/mt7986a-bananapi-bpi-r3-mini.dts' ./bpi-r3-mini-dts.patch
-sed -i '1a +++ b/arch/arm/dts/mt7986a-bananapi-bpi-r3-mini.dts' ./bpi-r3-mini-dts.patch
-
-# combine both patches
-cat ./mt7986a-dtsi.patch ./bpi-r3-mini-dts.patch > ./999-arm64-dts-mt7986-add-hnat.patch
-# clean up
-rm ./mt7986a-dtsi.patch
-rm ./bpi-r3-mini-dts.patch
-
-# copy to patches directory
-cp ./999-arm64-dts-mt7986-add-hnat.patch target/linux/mediatek/patches-6.6/999-arm64-dts-mt7986-add-hnat.patch
-rm ./999-arm64-dts-mt7986-add-hnat.patch
+# 999: thermal control in mt7986a-bananapi-bpi-r3-mini.dts
+# diff -u target/linux/mediatek/dts/mt7986a-bananapi-bpi-r3-mini.dts mt7986a-bananapi-bpi-r3-mini.dts > bpi-r3-mini-dts.patch
+# sed -i '1,2d' bpi-r3-mini-dts.patch
+# sed -i '1i --- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts' bpi-r3-mini-dts.patch
+# sed -i '1a +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-mini.dts' bpi-r3-mini-dts.patch
+# cp bpi-r3-mini-dts.patch target/linux/mediatek/patches-6.12/999-arm64-dts-mediatek-mt7986a-bpi-r3-mini-add-thermal-control.patch
+# rm bpi-r3-mini-dts.patch
