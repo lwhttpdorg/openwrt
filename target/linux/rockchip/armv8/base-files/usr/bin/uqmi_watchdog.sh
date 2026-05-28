@@ -44,10 +44,10 @@ function check_and_recover_service() {
 function check_connectivity() {
     local dnspod="119.29.29.29"
     local alidns="223.5.5.5"
-    local retries=6
+    local max_retries=6
     local reachable=0
 
-    for i in $(seq 1 "${retries}"); do
+    for i in $(seq 1 "${max_retries}"); do
         # Priority: try DNSPod first, then AliDNS.
         if ping -c 4 -W 3 "${dnspod}" > /dev/null 2>&1; then
             reachable=1
@@ -79,7 +79,7 @@ function set_device_operating_mode() {
     local dev=$1
     local mode=$2
     log "INFO" "setting device ${dev} to mode '${mode}'."
-    uqmi -d "${dev}" --set-device-operating-mode="${mode}"
+    timeout 5 uqmi -d "${dev}" --set-device-operating-mode="${mode}"
     if [ $? -ne 0 ]; then
         log "ERROR" "failed to set operating mode for ${dev}."
     fi
@@ -97,10 +97,9 @@ while true; do
             log "FATAL" "network down after ${MAX_FAILED_COUNT} retries. reboot system."
             /sbin/reboot
         else
-            log "WARN" "network down ${FAILED_COUNT}/${MAX_FAILED_COUNT})."
             NETWORK_STATUS=0
             set_device_operating_mode "${QMI_DEV}" reset
-            sleep 10
+            sleep 30
         fi
     else
         # network is reachable
@@ -112,3 +111,4 @@ while true; do
         sleep "${CHECK_INTERVAL}"
     fi
 done
+
