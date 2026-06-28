@@ -6,3 +6,4 @@ src-git telephony https://git.openwrt.org/feed/telephony.git^92892fa285360b8981f
 #src-git small https://github.com/kenzok8/small
 src-git passwall_packages https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git;main
 src-git passwall_luci https://github.com/Openwrt-Passwall/openwrt-passwall.git;main
+src-git uqmi_sms https://github.com/lwhttpdorg/uqmi-sms.git;main
