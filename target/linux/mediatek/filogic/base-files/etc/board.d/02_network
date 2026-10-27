@@ -138,7 +138,7 @@ mediatek_setup_interfaces()
 		;;
 	airpi,ap3000m|\
 	bananapi,bpi-r3-mini-emmc|\
-	bananapi,bpi-r3-mini-snand\
+	bananapi,bpi-r3-mini-snand|\
 	edgecore,eap111|\
 	hiveton,h5000m|\
 	huasifei,wh3000|\

@@ -635,7 +635,6 @@ TARGET_DEVICES += bananapi_bpi-r3
 define Device/bananapi_bpi-r3-mini-common
   DEVICE_VENDOR := Bananapi
   DEVICE_MODEL := BPi-R3 mini
-  DEVICE_DTS := mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_CONFIG := config-mt7986a-bananapi-bpi-r3-mini
   DEVICE_DTS_DIR := ../dts
   DEVICE_DTS_LOADADDR := 0x43f00000
@@ -654,6 +653,7 @@ define Device/bananapi_bpi-r3-mini-common
 endef
 
 define Device/bananapi_bpi-r3-mini-emmc
+  DEVICE_DTS := mt7986a-bananapi-bpi-r3-mini-emmc
   $(Device/bananapi_bpi-r3-mini-common)
   DEVICE_VARIANT := eMMC
   IMAGES := sysupgrade.itb
@@ -665,6 +665,7 @@ endef
 TARGET_DEVICES += bananapi_bpi-r3-mini-emmc
 
 define Device/bananapi_bpi-r3-mini-snand
+  DEVICE_DTS := mt7986a-bananapi-bpi-r3-mini-snand
   $(Device/bananapi_bpi-r3-mini-common)
   DEVICE_VARIANT := NAND
   BLOCKSIZE := 128k
