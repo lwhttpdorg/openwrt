@@ -6,8 +6,8 @@
  		 */
 -		/* cooling level (0, 1, 2) */
 -		cooling-levels = <255 96 0>;
-+		/* cooling levels: 0%, 10%, 20%, 30%, 40%, 50%, 60% duty */
-+		cooling-levels = <0 26 51 77 102 128 153>;
++		/* The fan PWM signal is inverted: 255 is off and 0 is full speed. */
++		cooling-levels = <255 153 128 102 77 51 26 0>;
  		pwms = <&pwm 0 10000>;
  	};
  
@@ -61,13 +61,13 @@
 +			};
 +
 +			cooling-maps {
-+				wifi0-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi0_trip_silent>; };
-+				wifi0-active-low { cooling-device = <&fan 1 1>; trip = <&wifi0_trip_low>; };
-+				wifi0-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi0_trip_med_low>; };
-+				wifi0-active-med { cooling-device = <&fan 3 3>; trip = <&wifi0_trip_med>; };
-+				wifi0-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi0_trip_med_high>; };
-+				wifi0-active-high { cooling-device = <&fan 5 5>; trip = <&wifi0_trip_high>; };
-+				wifi0-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi0_trip_hot>; };
++				wifi0-active-silent { cooling-device = <&fan 1 1>; trip = <&wifi0_trip_silent>; };
++				wifi0-active-low { cooling-device = <&fan 2 2>; trip = <&wifi0_trip_low>; };
++				wifi0-active-med-low { cooling-device = <&fan 3 3>; trip = <&wifi0_trip_med_low>; };
++				wifi0-active-med { cooling-device = <&fan 4 4>; trip = <&wifi0_trip_med>; };
++				wifi0-active-med-high { cooling-device = <&fan 5 5>; trip = <&wifi0_trip_med_high>; };
++				wifi0-active-high { cooling-device = <&fan 6 6>; trip = <&wifi0_trip_high>; };
++				wifi0-active-hot { cooling-device = <&fan 7 7>; trip = <&wifi0_trip_hot>; };
 +			};
 +		};
 +
@@ -115,13 +115,13 @@
 +			};
 +
 +			cooling-maps {
-+				wifi1-active-silent { cooling-device = <&fan 0 0>; trip = <&wifi1_trip_silent>; };
-+				wifi1-active-low { cooling-device = <&fan 1 1>; trip = <&wifi1_trip_low>; };
-+				wifi1-active-med-low { cooling-device = <&fan 2 2>; trip = <&wifi1_trip_med_low>; };
-+				wifi1-active-med { cooling-device = <&fan 3 3>; trip = <&wifi1_trip_med>; };
-+				wifi1-active-med-high { cooling-device = <&fan 4 4>; trip = <&wifi1_trip_med_high>; };
-+				wifi1-active-high { cooling-device = <&fan 5 5>; trip = <&wifi1_trip_high>; };
-+				wifi1-active-hot { cooling-device = <&fan 6 6>; trip = <&wifi1_trip_hot>; };
++				wifi1-active-silent { cooling-device = <&fan 1 1>; trip = <&wifi1_trip_silent>; };
++				wifi1-active-low { cooling-device = <&fan 2 2>; trip = <&wifi1_trip_low>; };
++				wifi1-active-med-low { cooling-device = <&fan 3 3>; trip = <&wifi1_trip_med_low>; };
++				wifi1-active-med { cooling-device = <&fan 4 4>; trip = <&wifi1_trip_med>; };
++				wifi1-active-med-high { cooling-device = <&fan 5 5>; trip = <&wifi1_trip_med_high>; };
++				wifi1-active-high { cooling-device = <&fan 6 6>; trip = <&wifi1_trip_high>; };
++				wifi1-active-hot { cooling-device = <&fan 7 7>; trip = <&wifi1_trip_hot>; };
 +			};
 +		};
 +	};
@@ -185,19 +185,20 @@
 -			/* active: set fan to cooling level 1 */
 +	cooling-maps {
 +		cpu-active-silent {
-+			cooling-device = <&fan 0 0>;
++			cooling-device = <&fan 1 1>;
 +			trip = <&cpu_trip_active_silent>;
 +		};
 +		cpu-active-low {
- 			cooling-device = <&fan 1 1>;
+-			cooling-device = <&fan 1 1>;
++			cooling-device = <&fan 2 2>;
 +			trip = <&cpu_trip_active_low>;
 +		};
 +		cpu-active-med-low {
-+			cooling-device = <&fan 2 2>;
++			cooling-device = <&fan 3 3>;
 +			trip = <&cpu_trip_active_med_low>;
 +		};
 +		cpu-active-med {
-+			cooling-device = <&fan 3 3>;
++			cooling-device = <&fan 4 4>;
  			trip = <&cpu_trip_active_med>;
  		};
 -
@@ -206,15 +207,15 @@
 -			cooling-device = <&fan 0 0>;
 -			trip = <&cpu_trip_active_low>;
 +		cpu-active-med-high {
-+			cooling-device = <&fan 4 4>;
++			cooling-device = <&fan 5 5>;
 +			trip = <&cpu_trip_active_med_high>;
 +		};
 +		cpu-active-high {
-+			cooling-device = <&fan 5 5>;
++			cooling-device = <&fan 6 6>;
 +			trip = <&cpu_trip_active_high>;
 +		};
 +		cpu-active-hot {
-+			cooling-device = <&fan 6 6>;
++			cooling-device = <&fan 7 7>;
 +			trip = <&cpu_trip_active_hot>;
  		};
  	};
